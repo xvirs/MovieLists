@@ -10,7 +10,6 @@ import com.proyect.movielists.domine.usecase.RemoveListUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
 import com.proyect.movielists.utils.StatusResult
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -25,13 +24,13 @@ class ListsViewModel(
 
 
     private val _isLoading = MutableStateFlow(false)
-    val isLoading: Flow<Boolean> = _isLoading
+    val isLoading = _isLoading.asStateFlow()
 
-    private val _successMessage = MutableStateFlow(false)
-    val successMessage: Flow<Boolean> = _successMessage
+    private val _successMessage = MutableStateFlow<String>("")
+    val successMessage = _successMessage.asStateFlow()
 
     private val _moviesLists = MutableStateFlow<List<ListItem>>(emptyList())
-    val moviesLists: Flow<List<ListItem>> = _moviesLists
+    val moviesLists = _moviesLists.asStateFlow()
 
     private val _errorMessage = MutableStateFlow<String>("")
     val errorMessage = _errorMessage.asStateFlow()
@@ -48,7 +47,7 @@ class ListsViewModel(
                 is StatusResult.Success -> {
                     setLoading(false)
                     getMovieLists()
-                    _successMessage.value = result.value.success
+                    _successMessage.value = "Lista creada exitosamente"
                 }
 
                 is StatusResult.Error -> {
@@ -83,7 +82,7 @@ class ListsViewModel(
             when (val result = addMovieToListUseCase.execute(movieId, listId)) {
                 is StatusResult.Success -> {
                     setLoading(false)
-                    _successMessage.value = result.value.success
+                    _successMessage.value = "Pelicula agregada exitosamente"
                 }
 
                 is StatusResult.Error -> {
@@ -100,7 +99,7 @@ class ListsViewModel(
             when (val result = removeMovieFromListUseCase.execute(movieId, listId)) {
                 is StatusResult.Success -> {
                     setLoading(false)
-                    _successMessage.value = result.value.success
+                    _successMessage.value = "Pelicula eliminada exitosamente"
                 }
                 is StatusResult.Error -> {
                     setLoading(false)
@@ -118,7 +117,7 @@ class ListsViewModel(
             when (val result = removeListUseCase.execute(listId)) {
                 is StatusResult.Success -> {
                     setLoading(false)
-                    _successMessage.value = result.value.success
+                    _successMessage.value = "Lista eliminada exitosamente"
                 }
 
                 is StatusResult.Error -> {
