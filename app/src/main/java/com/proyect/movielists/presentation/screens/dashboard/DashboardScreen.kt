@@ -1,12 +1,9 @@
-package com.proyect.movielists.presentation.screens.movies
+package com.proyect.movielists.presentation.screens.dashboard
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,37 +16,35 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.navigation.NavHostController
 import com.project.mytemplate.presentation.components.utils.ShimmerAnimation
-import com.proyect.movielists.domine.models.Movie
+import com.proyect.movielists.presentation.components.utils.MovieList
 import com.proyect.movielists.utils.MovieListType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-@Composable
-fun MoviesScreen() {
 
-    val viewModel: MoviesViewModel = koinViewModel()
+@Composable
+fun DashboardScreen(
+    navControllerAppNavigation: NavHostController,
+    snackBarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope
+) {
+    val viewModel: DashboardViewModel = koinViewModel()
     val isLoading = viewModel.isLoading.collectAsState(initial = false)
     val listMovies = viewModel.listMovies.collectAsState(initial = emptyList())
     val selectedMovieListType = remember { mutableStateOf(MovieListType.POPULAR) }
@@ -63,7 +58,6 @@ fun MoviesScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-//            SearchMovies()
             FilterChipLazyRow(
                 selectedMovieListType = selectedMovieListType.value,
                 onChipSelected = { movieListType ->
@@ -74,7 +68,18 @@ fun MoviesScreen() {
             if (isLoading.value) {
                 ShimmerMovieListPlaceholder()
             } else {
-                MovieList(listMovies.value)
+                MovieList(
+                    listMovies = listMovies.value,
+                    getMovieID = { movieId ->
+                        navControllerAppNavigation.navigate("movie/$movieId")
+                        coroutineScope.launch {
+                            snackBarHostState.showSnackbar(
+                                message = movieId.toString(),
+                                withDismissAction = true
+                            )
+                        }
+                    }
+                )
             }
         }
     }
@@ -113,58 +118,6 @@ fun FilterChipLazyRow(
                     null
                 },
             )
-        }
-    }
-}
-
-
-
-@Composable
-fun MovieList(listMovies: List<Movie>?){
-    LazyVerticalGrid(GridCells.Fixed(2)) {
-        listMovies?.forEach {
-            item {
-                ItemProduct(it)
-            }
-        }
-    }
-}
-
-@Composable
-fun ItemProduct(movie: Movie?){
-    Card(
-        modifier = Modifier
-//            .height(200.dp)
-            .padding(5.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(5.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                AsyncImage(
-                    modifier = Modifier.fillMaxWidth(),
-                    model = "https://image.tmdb.org/t/p/w500${movie?.backdropPath}",
-                    contentDescription = "Portada Product"
-                )
-            }
-
-            movie?.title?.let {
-                Text(
-                    text = it,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
-
-                )
-            }
-
         }
     }
 }

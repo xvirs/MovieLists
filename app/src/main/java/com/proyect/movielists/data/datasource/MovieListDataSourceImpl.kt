@@ -45,7 +45,7 @@ class MovieListDataSourceImpl(private val baseClient: BaseClient) : MovieListDat
         val response = baseClient.get(
             url = endpoint,
             errorMessage = errorMessage,
-            sessionId = sessionId,
+            valueParams = mapOf("session_id" to sessionId)
         )
         return if (response.httpResponse != null) {
             StatusResult.Success(response.httpResponse.body<GetMovieListsResponseDto>())

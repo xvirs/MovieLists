@@ -1,4 +1,4 @@
-package com.proyect.movielists.presentation.screens.Lists
+package com.proyect.movielists.presentation.screens.lists
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.project.mytemplate.presentation.components.utils.Loading
 import com.proyect.movielists.domine.models.ListItem
 import kotlinx.coroutines.CoroutineScope
@@ -34,6 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ListsScreen(
+    navControllerAppNavigation: NavHostController,
     snackBarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope
 ) {
@@ -57,7 +59,18 @@ fun ListsScreen(
             Loading()
         } else {
             if(moviesLists.value.isNotEmpty()){
-                MovieLists(moviesLists = moviesLists.value)
+                MovieLists(
+                    moviesLists = moviesLists.value,
+                    getListID = { listID ->
+                        navControllerAppNavigation.navigate("list/$listID")
+                        coroutineScope.launch {
+                            snackBarHostState.showSnackbar(
+                                message = listID.toString(),
+                                withDismissAction = true
+                            )
+                        }
+                    }
+                )
             } else {
                 Text(text = "No hay listas")
             }
@@ -81,7 +94,10 @@ fun ListsScreen(
 }
 
 @Composable
-fun MovieLists(moviesLists : List<ListItem>) {
+fun MovieLists(
+    moviesLists : List<ListItem>,
+    getListID: (Int) -> Unit
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -89,19 +105,27 @@ fun MovieLists(moviesLists : List<ListItem>) {
     ) {
         items(moviesLists.size) { index ->
             val listItem = moviesLists[index]
-            ItemList(listItem = listItem)
+            ItemList(
+                listItem = listItem,
+                getListID = getListID
+            )
         }
     }
 }
 
 
 @Composable
-fun ItemList(listItem: ListItem){
-
+fun ItemList(
+    listItem: ListItem,
+    getListID: (Int) -> Unit
+){
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable {
+                getListID(listItem.id)
+            }
     ) {
         Row(
             modifier = Modifier

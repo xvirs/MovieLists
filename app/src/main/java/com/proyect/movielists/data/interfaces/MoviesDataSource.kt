@@ -6,4 +6,5 @@ import com.proyect.movielists.utils.StatusResult
 
 interface MoviesDataSource {
     suspend fun getPopularList(movieListType : MovieListType) : StatusResult<MoviesResponseDto>
+    suspend fun searchMovieList(query: String): StatusResult<MoviesResponseDto>
 }

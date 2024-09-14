@@ -11,40 +11,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.proyect.movielists.presentation.navegation.AppNavigation
 import com.proyect.movielists.presentation.ui.theme.MovieListsTheme
+import org.koin.androidx.compose.KoinAndroidContext
+import org.koin.core.annotation.KoinExperimentalAPI
 
 class MainActivity : ComponentActivity() {
+    @OptIn(KoinExperimentalAPI::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MovieListsTheme(
-                dynamicColor = true,
-            ) {val navController = rememberNavController()
-                AppNavigation(navController)
-
-//                Scaffold()
-//                if (isLoading){
-//                    Loading()
-//                } else {
-//                    AppNavigation(navController)
-//                }
+            KoinAndroidContext {
+                MovieListsTheme(
+                    dynamicColor = true,
+                ) {
+                    AppNavigation()
+                }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MovieListsTheme {
-        Greeting("Android")
     }
 }

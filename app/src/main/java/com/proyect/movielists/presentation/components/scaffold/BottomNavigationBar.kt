@@ -1,10 +1,8 @@
 package com.proyect.movielists.presentation.components.scaffold
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Movie
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PlaylistAddCheckCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -25,8 +23,8 @@ fun BottomNavigationBar(navController: NavController) {
     var selectedItem by remember { mutableIntStateOf(1) }
 
     val items = listOf(
-        NavigationItem("Lista", Icons.Filled.PlaylistAddCheckCircle, Screen.Profile.route),
-        NavigationItem("Peliculas", Icons.Filled.Movie, Screen.Movies.route),
+        NavigationItem("Lista", Icons.Filled.PlaylistAddCheckCircle, Screen.Lists.route),
+        NavigationItem("Home", Icons.Filled.Home, Screen.Dashboard.route),
         NavigationItem("Favorito", Icons.Filled.Favorite, Screen.Screen3.route)
     )
 

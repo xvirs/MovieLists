@@ -4,8 +4,8 @@ import androidx.annotation.StringRes
 import com.proyect.movielists.R
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int) {
-    object Profile : Screen("profile", R.string.ProfileScreen)
-    object Movies : Screen("movies", R.string.MoviesScreen)
+    object Lists : Screen("lists", R.string.ListsScreen)
+    object Dashboard : Screen("dashboard", R.string.DashboardScreen)
     object Screen3 : Screen("screen3", R.string.screen3)
 }
 

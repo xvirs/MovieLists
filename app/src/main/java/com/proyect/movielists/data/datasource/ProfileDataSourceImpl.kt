@@ -13,7 +13,7 @@ class ProfileDataSourceImpl(private val baseClient: BaseClient) : ProfileDataSou
         val response = baseClient.get(
             url = endpoint,
             errorMessage = errorMessage,
-            sessionId = sessionId
+            valueParams = mapOf("session_id" to sessionId)
         )
         return if (response.httpResponse != null) {
             StatusResult.Success(response.httpResponse.body<UserProfileDto>())

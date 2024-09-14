@@ -9,25 +9,25 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.project.mytemplate.presentation.navegation.Screen
 import com.proyect.movielists.presentation.components.drawer.DrawerProfile
-import com.proyect.movielists.presentation.screens.movies.MoviesScreen
-import com.proyect.movielists.presentation.screens.Lists.ListsScreen
+import com.proyect.movielists.presentation.screens.dashboard.DashboardScreen
+import com.proyect.movielists.presentation.screens.lists.ListsScreen
 import com.proyect.movielists.presentation.screens.Favorites.FavoritesScreen
+import kotlinx.coroutines.CoroutineScope
 
-@Preview
 @Composable
-fun MainScreen() {
-    val navController = rememberNavController()
-    val snackBarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
+fun MainScreen(
+    navControllerAppNavigation: NavHostController,
+    snackBarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope
+) {
+    val navControllerMainScreen = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     ModalNavigationDrawer(
@@ -39,31 +39,37 @@ fun MainScreen() {
             Scaffold(
                 topBar = {
                     TopBar(
+                        navControllerAppNavigation = navControllerAppNavigation,
                         snackBarHostState = snackBarHostState,
                         coroutineScope = coroutineScope,
                         drawerState = drawerState
                     )
                 },
                 bottomBar = {
-                    BottomNavigationBar(navController)
+                    BottomNavigationBar(navControllerMainScreen)
                 },
                 snackbarHost = {
                     SnackbarHost(hostState = snackBarHostState)
                 },
                 content = { innerPadding ->
                     NavHost(
-                        navController,
-                        startDestination = Screen.Movies.route,
+                        navController = navControllerMainScreen,
+                        startDestination = Screen.Dashboard.route,
                         Modifier.padding(innerPadding)
                     ) {
-                        composable(Screen.Profile.route) {
+                        composable(Screen.Lists.route) {
                             ListsScreen(
+                                navControllerAppNavigation = navControllerAppNavigation,
                                 snackBarHostState = snackBarHostState,
                                 coroutineScope = coroutineScope
                             )
                         }
-                        composable(Screen.Movies.route) {
-                            MoviesScreen()
+                        composable(Screen.Dashboard.route) {
+                            DashboardScreen(
+                                navControllerAppNavigation = navControllerAppNavigation,
+                                snackBarHostState = snackBarHostState,
+                                coroutineScope = coroutineScope,
+                            )
                         }
                         composable(Screen.Screen3.route) {
                             FavoritesScreen(
@@ -77,8 +83,3 @@ fun MainScreen() {
         }
     )
 }
-
-
-
-
-

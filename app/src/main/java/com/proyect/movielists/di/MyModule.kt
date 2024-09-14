@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.proyect.movielists.presentation.screens.login.AuthViewModel
 import com.proyect.movielists.presentation.components.drawer.ProfileViewModel
-import com.proyect.movielists.presentation.screens.movies.MoviesViewModel
+import com.proyect.movielists.presentation.screens.dashboard.DashboardViewModel
 import com.proyect.movielists.data.datasource.AuthDataSourceImpl
 import com.proyect.movielists.data.datasource.MovieListDataSourceImpl
 import com.proyect.movielists.data.datasource.MoviesDataSourceImpl
@@ -36,9 +36,11 @@ import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
 import com.proyect.movielists.domine.usecase.MoviesUseCase
 import com.proyect.movielists.domine.usecase.ProfileUseCase
 import com.proyect.movielists.domine.usecase.RequestTokenUseCase
+import com.proyect.movielists.domine.usecase.SearchMoviesUseCase
 import com.proyect.movielists.domine.usecase.ValidateLoginUseCase
+import com.proyect.movielists.presentation.components.seachBar.SearchBarViewModel
 import com.proyect.movielists.presentation.screens.Favorites.FavoritesViewModel
-import com.proyect.movielists.presentation.screens.Lists.ListsViewModel
+import com.proyect.movielists.presentation.screens.lists.ListsViewModel
 import org.koin.dsl.module
 import org.koin.androidx.viewmodel.dsl.viewModel
 
@@ -60,6 +62,7 @@ val useCaseModule = module {
     single<MoviesDataSource> { MoviesDataSourceImpl(get()) }
     single<MoviesRepository> { MoviesRepositoryImpl(get()) }
     factory { MoviesUseCase(get()) }
+    factory { SearchMoviesUseCase(get()) }
 
     single<MovieListDataSource> { MovieListDataSourceImpl(get()) }
     single<MovieListRepository> { MovieListRepositoryImpl(get(), get()) }
@@ -74,9 +77,10 @@ val useCaseModule = module {
 val viewModelModule = module {
     viewModel { AuthViewModel(get(),get(),get()) }
     viewModel { ProfileViewModel(get()) }
-    viewModel { MoviesViewModel(get()) }
+    viewModel { DashboardViewModel(get()) }
     viewModel { FavoritesViewModel() }
     viewModel { ListsViewModel(get(),get(),get(),get(),get()) }
+    viewModel { SearchBarViewModel(get()) }
 }
 
 
