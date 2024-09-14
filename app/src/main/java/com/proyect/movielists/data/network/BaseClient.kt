@@ -61,7 +61,7 @@ class BaseClient {
     internal suspend fun get(
         url: String,
         body: String? = null,
-        sessionId: String? = null,
+        valueParams: Map<String, String>? = null,
         errorMessage: String,
     ): HttpStatus {
         return try {
@@ -71,8 +71,8 @@ class BaseClient {
                     setBody(body)
                 }
                 header("Authorization", "Bearer $BEARER_TOKEN")
-                sessionId?.let {
-                    parameter("session_id", it)
+                valueParams?.let {
+                    parameter(it.keys.first(), it.values.first())
                 }
             }
             if (response.status.value in 200..299) {

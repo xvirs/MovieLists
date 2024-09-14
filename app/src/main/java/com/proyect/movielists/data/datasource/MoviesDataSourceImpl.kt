@@ -21,4 +21,19 @@ class MoviesDataSourceImpl(private val baseClient: BaseClient) : MoviesDataSourc
             StatusResult.Error(response.errorMessage)
         }
     }
+
+    override suspend fun searchMovieList(query: String): StatusResult<MoviesResponseDto> {
+        val endpoint = "/search/movie"
+        val errorMessage = "Error al buscar la pelicula"
+        val response = baseClient.get(
+            url = endpoint,
+            errorMessage = errorMessage,
+            valueParams = mapOf("query" to query)
+        )
+        return if (response.httpResponse != null) {
+            StatusResult.Success(response.httpResponse.body<MoviesResponseDto>())
+        } else {
+            StatusResult.Error(response.errorMessage)
+        }
+    }
 }

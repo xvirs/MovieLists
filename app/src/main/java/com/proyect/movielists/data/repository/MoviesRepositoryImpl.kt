@@ -8,10 +8,18 @@ import com.proyect.movielists.utils.MovieListType
 import com.proyect.movielists.utils.StatusResult
 
 class MoviesRepositoryImpl(private val moviesDataSource: MoviesDataSource): MoviesRepository {
-    override suspend fun getPopularList(movieListType: MovieListType): StatusResult<MoviesResponse> {
+    override suspend fun getMovieList(movieListType: MovieListType): StatusResult<MoviesResponse> {
         return when(val result = moviesDataSource.getPopularList(movieListType)){
             is StatusResult.Success -> StatusResult.Success(result.value.toMovieListsResponse())
             is StatusResult.Error -> StatusResult.Error(result.message)
         }
     }
+
+    override suspend fun searchMovieList(query: String): StatusResult<MoviesResponse> {
+        return when(val result = moviesDataSource.searchMovieList(query)){
+            is StatusResult.Success -> StatusResult.Success(result.value.toMovieListsResponse())
+            is StatusResult.Error -> StatusResult.Error(result.message)
+        }
+    }
+
 }

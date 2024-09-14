@@ -36,7 +36,9 @@ import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
 import com.proyect.movielists.domine.usecase.MoviesUseCase
 import com.proyect.movielists.domine.usecase.ProfileUseCase
 import com.proyect.movielists.domine.usecase.RequestTokenUseCase
+import com.proyect.movielists.domine.usecase.SearchMoviesUseCase
 import com.proyect.movielists.domine.usecase.ValidateLoginUseCase
+import com.proyect.movielists.presentation.components.seachBar.SearchBarViewModel
 import com.proyect.movielists.presentation.screens.Favorites.FavoritesViewModel
 import com.proyect.movielists.presentation.screens.Lists.ListsViewModel
 import org.koin.dsl.module
@@ -60,6 +62,7 @@ val useCaseModule = module {
     single<MoviesDataSource> { MoviesDataSourceImpl(get()) }
     single<MoviesRepository> { MoviesRepositoryImpl(get()) }
     factory { MoviesUseCase(get()) }
+    factory { SearchMoviesUseCase(get()) }
 
     single<MovieListDataSource> { MovieListDataSourceImpl(get()) }
     single<MovieListRepository> { MovieListRepositoryImpl(get(), get()) }
@@ -77,6 +80,7 @@ val viewModelModule = module {
     viewModel { MoviesViewModel(get()) }
     viewModel { FavoritesViewModel() }
     viewModel { ListsViewModel(get(),get(),get(),get(),get()) }
+    viewModel { SearchBarViewModel(get()) }
 }
 
 
