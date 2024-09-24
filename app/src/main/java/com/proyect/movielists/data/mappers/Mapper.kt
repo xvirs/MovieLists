@@ -3,8 +3,10 @@ package com.proyect.movielists.data.mappers
 import com.proyect.movielists.data.models.dto.AddMovieToListRequestDto
 import com.proyect.movielists.data.models.dto.AddMovieToListResponseDto
 import com.proyect.movielists.data.models.dto.AvatarDto
+import com.proyect.movielists.data.models.dto.CollectionInfoDto
 import com.proyect.movielists.data.models.dto.CreateMovieListRequestDto
 import com.proyect.movielists.data.models.dto.CreateMovieListResponseDto
+import com.proyect.movielists.data.models.dto.GenreDto
 import com.proyect.movielists.data.models.dto.RemoveMovieFromListRequestDto
 import com.proyect.movielists.data.models.dto.RemoveMovieFromListResponseDto
 import com.proyect.movielists.data.models.dto.RemoveListResponseDto
@@ -12,16 +14,22 @@ import com.proyect.movielists.data.models.dto.GetMovieListsResponseDto
 import com.proyect.movielists.data.models.dto.GravatarDto
 import com.proyect.movielists.data.models.dto.ListItemDto
 import com.proyect.movielists.data.models.dto.LoginResponseDto
+import com.proyect.movielists.data.models.dto.MovieDetailsDto
 import com.proyect.movielists.data.models.dto.MovieDto
 import com.proyect.movielists.data.models.dto.MoviesResponseDto
+import com.proyect.movielists.data.models.dto.ProductionCompanyDto
+import com.proyect.movielists.data.models.dto.ProductionCountryDto
 import com.proyect.movielists.data.models.dto.SessionTokenResponseDto
+import com.proyect.movielists.data.models.dto.SpokenLanguageDto
 import com.proyect.movielists.data.models.dto.TmdbDto
 import com.proyect.movielists.data.models.dto.UserProfileDto
 import com.proyect.movielists.domine.models.AddMovieToListRequest
 import com.proyect.movielists.domine.models.AddMovieToListResponse
 import com.proyect.movielists.domine.models.Avatar
+import com.proyect.movielists.domine.models.CollectionInfo
 import com.proyect.movielists.domine.models.CreateMovieListRequest
 import com.proyect.movielists.domine.models.CreateMovieListResponse
+import com.proyect.movielists.domine.models.Genre
 import com.proyect.movielists.domine.models.RemoveMovieFromListRequest
 import com.proyect.movielists.domine.models.RemoveMovieFromListResponse
 import com.proyect.movielists.domine.models.RemoveListResponse
@@ -30,8 +38,12 @@ import com.proyect.movielists.domine.models.Gravatar
 import com.proyect.movielists.domine.models.ListItem
 import com.proyect.movielists.domine.models.LoginResponse
 import com.proyect.movielists.domine.models.Movie
+import com.proyect.movielists.domine.models.MovieDetails
 import com.proyect.movielists.domine.models.MoviesResponse
+import com.proyect.movielists.domine.models.ProductionCompany
+import com.proyect.movielists.domine.models.ProductionCountry
 import com.proyect.movielists.domine.models.SessionTokenResponse
+import com.proyect.movielists.domine.models.SpokenLanguage
 import com.proyect.movielists.domine.models.Tmdb
 import com.proyect.movielists.domine.models.UserProfile
 
@@ -184,3 +196,73 @@ fun RemoveListResponseDto.toDomainModel(): RemoveListResponse {
     )
 }
 
+fun MovieDetailsDto.toMovieDetails(): MovieDetails {
+    return MovieDetails(
+        adult = this.adult,
+        backdropPath = this.backdropPath,
+        belongsToCollection = this.belongsToCollection?.toCollectionInfo(),
+        budget = this.budget,
+        genres = this.genres.map { it.toGenre() },
+        homepage = this.homepage,
+        id = this.id,
+        imdbId = this.imdbId,
+        originCountry = this.originCountry,
+        originalLanguage = this.originalLanguage,
+        originalTitle = this.originalTitle,
+        overview = this.overview,
+        popularity = this.popularity,
+        posterPath = this.posterPath,
+        productionCompanies = this.productionCompanies.map { it.toProductionCompany() },
+        productionCountries = this.productionCountries.map { it.toProductionCountry() },
+        releaseDate = this.releaseDate,
+        revenue = this.revenue,
+        runtime = this.runtime,
+        spokenLanguages = this.spokenLanguages.map { it.toSpokenLanguage() },
+        status = this.status,
+        tagline = this.tagline,
+        title = this.title,
+        video = this.video,
+        voteAverage = this.voteAverage,
+        voteCount = this.voteCount
+    )
+}
+
+fun GenreDto.toGenre(): Genre {
+    return Genre(
+        id = this.id,
+        name = this.name
+    )
+}
+
+fun ProductionCompanyDto.toProductionCompany(): ProductionCompany {
+    return ProductionCompany(
+        id = this.id,
+        logoPath = this.logoPath,
+        name = this.name,
+        originCountry = this.originCountry
+    )
+}
+
+fun ProductionCountryDto.toProductionCountry(): ProductionCountry {
+    return ProductionCountry(
+        iso = this.iso,
+        name = this.name
+    )
+}
+
+fun SpokenLanguageDto.toSpokenLanguage(): SpokenLanguage {
+    return SpokenLanguage(
+        englishName = this.englishName,
+        iso = this.iso,
+        name = this.name
+    )
+}
+
+fun CollectionInfoDto.toCollectionInfo(): CollectionInfo {
+    return CollectionInfo(
+        id = this.id,
+        name = this.name,
+        posterPath = this.posterPath,
+        backdropPath = this.backdropPath
+    )
+}

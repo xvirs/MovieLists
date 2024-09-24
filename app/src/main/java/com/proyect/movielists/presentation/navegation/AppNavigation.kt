@@ -29,7 +29,9 @@ fun AppNavigation(){
         }
         composable("movie/{movieId}") { backStackEntry ->
             val movieId = backStackEntry.arguments?.getString("movieId")
-            MovieScreen(movieId = movieId!!)
+            MovieScreen( movieId = movieId!!) {
+                navControllerAppNavigation.popBackStack()
+            }
         }
         composable("list/{listId}") { backStackEntry ->
             val listId = backStackEntry.arguments?.getString("listId")
