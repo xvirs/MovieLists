@@ -33,6 +33,29 @@ data class ListItem(
     val posterPath: String?
 )
 
+data class GetMovieListResponse(
+    val createdBy: String,
+    val description: String,
+    val favoriteCount: Int,
+    val id: Int,
+    val language: String,
+    val itemCount: Int,
+    val movies: List<MovieItem> = emptyList(),
+    val name: String,
+    val page: Int,
+    val posterPath: String? = null,
+    val totalPages: Int,
+    val totalResults: Int
+)
+
+data class MovieItem(
+    val id: Int,
+    val title: String? = null,
+    val overview: String? = null,
+    val posterPath: String? = null
+)
+
+
 // AddMovieListMovie
 data class AddMovieToListRequest(
     val mediaId: Int

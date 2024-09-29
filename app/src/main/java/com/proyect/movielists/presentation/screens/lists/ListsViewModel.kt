@@ -23,6 +23,7 @@ class ListsViewModel(
 ) : ViewModel() {
 
 
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
@@ -35,8 +36,11 @@ class ListsViewModel(
     private val _errorMessage = MutableStateFlow<String>("")
     val errorMessage = _errorMessage.asStateFlow()
 
+    init{
+        getMovieLists()
+    }
 
-    fun setLoading(value: Boolean) {
+    private fun setLoading(value: Boolean) {
         _isLoading.value = value
     }
 
@@ -59,7 +63,7 @@ class ListsViewModel(
     }
 
 
-    fun getMovieLists() {
+    private fun getMovieLists() {
         setLoading(true)
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = getMovieListsUseCase.execute()) {
@@ -76,7 +80,7 @@ class ListsViewModel(
         }
     }
 
-    fun addMovieToList(listId: Int, movieId: Int) {
+    fun addMovieToList(listId: String, movieId: Int) {
         setLoading(true)
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = addMovieToListUseCase.execute(movieId, listId)) {
@@ -93,7 +97,7 @@ class ListsViewModel(
         }
     }
 
-    fun removeMovieFromList(listId: Int, movieId: Int) {
+    fun removeMovieFromList(listId: String, movieId: String) {
         setLoading(true)
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = removeMovieFromListUseCase.execute(movieId, listId)) {
@@ -116,11 +120,13 @@ class ListsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = removeListUseCase.execute(listId)) {
                 is StatusResult.Success -> {
+                    getMovieLists()
                     setLoading(false)
                     _successMessage.value = "Lista eliminada exitosamente"
                 }
 
                 is StatusResult.Error -> {
+                    getMovieLists()
                     setLoading(false)
                     _errorMessage.value = result.message
                 }

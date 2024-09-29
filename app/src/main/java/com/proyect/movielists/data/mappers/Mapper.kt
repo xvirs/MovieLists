@@ -7,6 +7,7 @@ import com.proyect.movielists.data.models.dto.CollectionInfoDto
 import com.proyect.movielists.data.models.dto.CreateMovieListRequestDto
 import com.proyect.movielists.data.models.dto.CreateMovieListResponseDto
 import com.proyect.movielists.data.models.dto.GenreDto
+import com.proyect.movielists.data.models.dto.GetMovieListResponseDto
 import com.proyect.movielists.data.models.dto.RemoveMovieFromListRequestDto
 import com.proyect.movielists.data.models.dto.RemoveMovieFromListResponseDto
 import com.proyect.movielists.data.models.dto.RemoveListResponseDto
@@ -16,6 +17,7 @@ import com.proyect.movielists.data.models.dto.ListItemDto
 import com.proyect.movielists.data.models.dto.LoginResponseDto
 import com.proyect.movielists.data.models.dto.MovieDetailsDto
 import com.proyect.movielists.data.models.dto.MovieDto
+import com.proyect.movielists.data.models.dto.MovieItemDto
 import com.proyect.movielists.data.models.dto.MoviesResponseDto
 import com.proyect.movielists.data.models.dto.ProductionCompanyDto
 import com.proyect.movielists.data.models.dto.ProductionCountryDto
@@ -30,6 +32,7 @@ import com.proyect.movielists.domine.models.CollectionInfo
 import com.proyect.movielists.domine.models.CreateMovieListRequest
 import com.proyect.movielists.domine.models.CreateMovieListResponse
 import com.proyect.movielists.domine.models.Genre
+import com.proyect.movielists.domine.models.GetMovieListResponse
 import com.proyect.movielists.domine.models.RemoveMovieFromListRequest
 import com.proyect.movielists.domine.models.RemoveMovieFromListResponse
 import com.proyect.movielists.domine.models.RemoveListResponse
@@ -39,6 +42,7 @@ import com.proyect.movielists.domine.models.ListItem
 import com.proyect.movielists.domine.models.LoginResponse
 import com.proyect.movielists.domine.models.Movie
 import com.proyect.movielists.domine.models.MovieDetails
+import com.proyect.movielists.domine.models.MovieItem
 import com.proyect.movielists.domine.models.MoviesResponse
 import com.proyect.movielists.domine.models.ProductionCompany
 import com.proyect.movielists.domine.models.ProductionCountry
@@ -159,6 +163,33 @@ fun ListItemDto.toDomainModel(): ListItem {
         posterPath = this.posterPath
     )
 }
+
+fun GetMovieListResponseDto.toDomainModel(): GetMovieListResponse {
+    return GetMovieListResponse(
+        createdBy = this.createdBy,
+        description = this.description,
+        favoriteCount = this.favoriteCount,
+        id = this.id,
+        language = this.iso6391,
+        itemCount = this.itemCount,
+        movies = this.items.map { it.toDomain() },
+        name = this.name,
+        page = this.page,
+        posterPath = this.posterPath,
+        totalPages = this.totalPages,
+        totalResults = this.totalResults
+    )
+}
+
+fun MovieItemDto.toDomain(): MovieItem {
+    return MovieItem(
+        id = this.id,
+        title = this.title,
+        overview = this.overview,
+        posterPath = this.posterPath
+    )
+}
+
 
 fun AddMovieToListRequest.toDataModel(): AddMovieToListRequestDto {
     return AddMovieToListRequestDto(

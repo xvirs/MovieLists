@@ -6,7 +6,7 @@ import com.proyect.movielists.domine.models.RemoveMovieFromListResponse
 import com.proyect.movielists.utils.StatusResult
 
 class RemoveMovieFromListUseCase(private val repository: MovieListRepository) {
-    suspend fun execute(mediaId: Int, listId: Int): StatusResult<RemoveMovieFromListResponse> {
-        return repository.removeMovieFromList(RemoveMovieFromListRequest(mediaId), listId.toString())
+    suspend fun execute(mediaId: String, listId: String): StatusResult<RemoveMovieFromListResponse> {
+        return repository.removeMovieFromList(RemoveMovieFromListRequest(mediaId.toInt()), listId)
     }
 }

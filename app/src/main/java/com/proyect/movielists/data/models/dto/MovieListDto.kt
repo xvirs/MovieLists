@@ -39,6 +39,31 @@ data class ListItemDto(
     @SerialName("poster_path") val posterPath: String?
 )
 
+@Serializable
+data class GetMovieListResponseDto(
+    @SerialName("created_by") val createdBy: String,  // Ahora es un String
+    val description: String,
+    @SerialName("favorite_count") val favoriteCount: Int,
+    val id: Int,
+    @SerialName("iso_639_1") val iso6391: String,
+    @SerialName("item_count") val itemCount: Int,
+    val items: List<MovieItemDto> = emptyList(),
+    val name: String,
+    val page: Int,
+    @SerialName("poster_path") val posterPath: String? = null,
+    @SerialName("total_pages") val totalPages: Int,
+    @SerialName("total_results") val totalResults: Int
+)
+
+@Serializable
+data class MovieItemDto(
+    val id: Int,
+    val title: String? = null,
+    val overview: String? = null,
+    @SerialName("poster_path") val posterPath: String? = null
+)
+
+
 
 // AddMovieListMovieDto
 @Serializable
@@ -73,3 +98,4 @@ data class RemoveListResponseDto(
     @SerialName("status_code") val statusCode: Int,
     @SerialName("status_message") val statusMessage: String
 )
+

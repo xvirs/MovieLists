@@ -5,6 +5,7 @@ import com.proyect.movielists.data.models.dto.AddMovieToListRequestDto
 import com.proyect.movielists.data.models.dto.AddMovieToListResponseDto
 import com.proyect.movielists.data.models.dto.CreateMovieListRequestDto
 import com.proyect.movielists.data.models.dto.CreateMovieListResponseDto
+import com.proyect.movielists.data.models.dto.GetMovieListResponseDto
 import com.proyect.movielists.data.models.dto.RemoveMovieFromListRequestDto
 import com.proyect.movielists.data.models.dto.RemoveMovieFromListResponseDto
 import com.proyect.movielists.data.models.dto.RemoveListResponseDto
@@ -31,6 +32,22 @@ class MovieListDataSourceImpl(private val baseClient: BaseClient) : MovieListDat
             )
         return if (response.httpResponse != null) {
             StatusResult.Success(response.httpResponse.body<CreateMovieListResponseDto>())
+        } else {
+            StatusResult.Error(response.errorMessage)
+        }
+    }
+
+    override suspend fun getMovieList(
+        listId: String,
+    ): StatusResult<GetMovieListResponseDto> {
+        val endpoint = "/list/${listId}"
+        val errorMessage = "Error al crear la lista"
+        val response = baseClient.get(
+            url = endpoint,
+            errorMessage = errorMessage
+        )
+        return if (response.httpResponse != null) {
+            StatusResult.Success(response.httpResponse.body<GetMovieListResponseDto>())
         } else {
             StatusResult.Error(response.errorMessage)
         }
@@ -99,7 +116,7 @@ class MovieListDataSourceImpl(private val baseClient: BaseClient) : MovieListDat
         sessionId: String
     ): StatusResult<RemoveListResponseDto> {
         val endpoint = "/list/${listId}"
-        val errorMessage = "Error al crear la lista"
+        val errorMessage = "Error al eliminar la lista"
         val response = baseClient.delete(
             url = endpoint,
             errorMessage = errorMessage,

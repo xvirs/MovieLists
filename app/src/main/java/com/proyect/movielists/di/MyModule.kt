@@ -34,6 +34,7 @@ import com.proyect.movielists.domine.interfaces.ProfileRepository
 import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
 import com.proyect.movielists.domine.usecase.CreateMovieListUseCase
 import com.proyect.movielists.domine.usecase.CreateSessionUseCase
+import com.proyect.movielists.domine.usecase.GetMovieListUseCase
 import com.proyect.movielists.domine.usecase.RemoveMovieFromListUseCase
 import com.proyect.movielists.domine.usecase.RemoveListUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
@@ -45,6 +46,7 @@ import com.proyect.movielists.domine.usecase.SearchMoviesUseCase
 import com.proyect.movielists.domine.usecase.ValidateLoginUseCase
 import com.proyect.movielists.presentation.components.seachBar.SearchBarViewModel
 import com.proyect.movielists.presentation.screens.Favorites.FavoritesViewModel
+import com.proyect.movielists.presentation.screens.list.ListViewModel
 import com.proyect.movielists.presentation.screens.lists.ListsViewModel
 import com.proyect.movielists.presentation.screens.movie.MovieViewModel
 import org.koin.dsl.module
@@ -77,6 +79,7 @@ val useCaseModule = module {
     factory { AddMovieToListUseCase(get()) }
     factory { RemoveMovieFromListUseCase(get()) }
     factory { RemoveListUseCase(get()) }
+    factory { GetMovieListUseCase(get()) }
 
     single<MovieDataSource> { MovieDataSourceImpl(get()) }
     single<MovieRepository> { MovieRepositoryImpl(get()) }
@@ -90,6 +93,7 @@ val viewModelModule = module {
     viewModel { DashboardViewModel(get()) }
     viewModel { FavoritesViewModel() }
     viewModel { ListsViewModel(get(),get(),get(),get(),get()) }
+    viewModel { ListViewModel(get(), get(), get(), get()) }
     viewModel { SearchBarViewModel(get()) }
     viewModel { MovieViewModel(get()) }
 }
