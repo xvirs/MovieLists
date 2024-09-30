@@ -90,12 +90,12 @@ val useCaseModule = module {
 val viewModelModule = module {
     viewModel { AuthViewModel(get(),get(),get()) }
     viewModel { ProfileViewModel(get()) }
-    viewModel { DashboardViewModel(get()) }
+    viewModel { DashboardViewModel(get(), get(), get()) }
     viewModel { FavoritesViewModel() }
     viewModel { ListsViewModel(get(),get(),get(),get(),get()) }
     viewModel { ListViewModel(get(), get(), get(), get()) }
     viewModel { SearchBarViewModel(get()) }
-    viewModel { MovieViewModel(get()) }
+    viewModel { MovieViewModel(get(), get(), get()) }
 }
 
 

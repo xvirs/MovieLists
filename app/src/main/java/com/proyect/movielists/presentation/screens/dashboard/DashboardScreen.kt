@@ -17,18 +17,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.project.mytemplate.presentation.components.utils.ShimmerAnimation
@@ -46,8 +51,11 @@ fun DashboardScreen(
 ) {
     val viewModel: DashboardViewModel = koinViewModel()
     val isLoading = viewModel.isLoading.collectAsState(initial = false)
-    val listMovies = viewModel.listMovies.collectAsState(initial = emptyList())
+    val movies by viewModel.movies.collectAsState(initial = emptyList())
+    val movieLists by viewModel.movieLists.collectAsState(initial = emptyList())
     val selectedMovieListType = remember { mutableStateOf(MovieListType.POPULAR) }
+    val expandMenu = remember { mutableStateOf(false) }
+    val movieID = remember { mutableStateOf(0) }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -69,8 +77,8 @@ fun DashboardScreen(
                 ShimmerMovieListPlaceholder()
             } else {
                 MovieList(
-                    listMovies = listMovies.value,
-                    getMovieID = { movieId ->
+                    listMovies = movies,
+                    onTap = { movieId ->
                         navControllerAppNavigation.navigate("movie/$movieId")
                         coroutineScope.launch {
                             snackBarHostState.showSnackbar(
@@ -78,8 +86,36 @@ fun DashboardScreen(
                                 withDismissAction = true
                             )
                         }
+                    },
+                    onLongPress = {
+                        movieID.value = it
+                        expandMenu.value = true
                     }
                 )
+                DropdownMenu(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    expanded = expandMenu.value,
+                    onDismissRequest = { expandMenu.value = false }
+                ) {
+                    movieLists.forEach { list ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = list.name,
+                                    maxLines = 1,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            },
+                            onClick = {
+                                viewModel.addMovieToList(
+                                    list.id.toString(), movieID.value
+                                )
+                                expandMenu.value = false
+                            }
+                        )
+                    }
+                }
             }
         }
     }
@@ -154,7 +190,7 @@ fun ShimmerItemProductPlaceholder() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp) // Tamaño del espacio para la imagen de portada
+                    .height(120.dp)
             ){
                 ShimmerAnimation(
                     modifier = Modifier

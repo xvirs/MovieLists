@@ -1,6 +1,7 @@
 package com.proyect.movielists.presentation.components.utils
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -32,14 +34,16 @@ import com.proyect.movielists.domine.models.Movie
 @Composable
 fun MovieList(
     listMovies: List<Movie>?,
-    getMovieID: (Int) -> Unit,
+    onTap: (Int) -> Unit,
+    onLongPress: (Int) -> Unit
 ){
     LazyVerticalGrid(GridCells.Fixed(2)) {
         listMovies?.forEach {
             item {
                 ItemMovie(
                     movie = it,
-                    getMovieID = getMovieID
+                    onTap = onTap,
+                    onLongPress = onLongPress
                 )
             }
         }
@@ -50,13 +54,21 @@ fun MovieList(
 @Composable
 fun ItemMovie(
     movie: Movie?,
-    getMovieID: (Int) -> Unit)
-{
+    onTap: (Int) -> Unit,
+    onLongPress: (Int) -> Unit
+) {
     Card(
         modifier = Modifier
             .padding(5.dp)
-            .clickable {
-                getMovieID(movie?.id ?: 0)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = {
+                        onLongPress(movie?.id ?: 0)
+                    },
+                    onTap = {
+                        onTap(movie?.id ?: 0)
+                    }
+                )
             }
     ) {
         Column(
@@ -101,6 +113,7 @@ fun ItemMovie(
 
 
 
+
 @Composable
 fun SearchMovieList(
     listMovies: List<Movie>?,
@@ -108,7 +121,7 @@ fun SearchMovieList(
 ) {
     LazyColumn() {
         listMovies?.forEach { movie ->
-            movie.backdropPath.let {
+            movie.let {
                 item {
                     ItemMovieSearching(
                         movie = movie,
@@ -142,11 +155,13 @@ fun ItemMovieSearching(
                 modifier = Modifier
                     .size(64.dp) // Tamaño del cuadrado para la imagen
             ) {
-                AsyncImage(
-                    model = "https://image.tmdb.org/t/p/w500${movie?.backdropPath}",
-                    contentDescription = "Portada Movie",
-                    modifier = Modifier.fillMaxSize()
-                )
+                if (movie != null) {
+                    AsyncImage(
+                        model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
+                        contentDescription = "Portada Movie",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.width(8.dp))
