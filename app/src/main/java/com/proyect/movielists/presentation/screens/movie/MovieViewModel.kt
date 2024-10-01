@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.proyect.movielists.domine.models.ListItem
 import com.proyect.movielists.domine.models.MovieDetails
+import com.proyect.movielists.domine.usecase.AddFavoriteUseCase
 import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
 import com.proyect.movielists.domine.usecase.GetMovieUseCase
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 class MovieViewModel(
     private val getMovieUseCase: GetMovieUseCase,
     private val getMovieListsUseCase: GetMovieListsUseCase,
-    private val addMovieToListUseCase: AddMovieToListUseCase
+    private val addMovieToListUseCase: AddMovieToListUseCase,
+    private val addFavoriteUseCase: AddFavoriteUseCase
 ) : ViewModel() {
 
     private val _movieState = MutableStateFlow<UiState<MovieDetails>>(UiState.Loading)
@@ -72,6 +74,19 @@ class MovieViewModel(
                     _successMessage.value = "Pelicula agregada exitosamente"
                 }
 
+                is StatusResult.Error -> {
+                    _errorMessage.value = result.message
+                }
+            }
+        }
+    }
+
+    fun addFavorite(movieId: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = addFavoriteUseCase.execute(movieId)) {
+                is StatusResult.Success -> {
+                    _successMessage.value = "Pelicula agregada exitosamente"
+                }
                 is StatusResult.Error -> {
                     _errorMessage.value = result.message
                 }

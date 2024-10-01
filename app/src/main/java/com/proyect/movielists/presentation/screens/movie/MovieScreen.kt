@@ -95,7 +95,9 @@ fun MovieScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = { /* Acción para marcar como favorito */ }) {
+                    IconButton(onClick = {
+                        viewModel.addFavorite(movieId.toInt())
+                    }) {
                         Icon(
                             imageVector = Icons.Default.FavoriteBorder,
                             contentDescription = "Mark as Favorite",

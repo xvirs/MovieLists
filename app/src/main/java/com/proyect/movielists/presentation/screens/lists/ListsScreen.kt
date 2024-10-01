@@ -1,9 +1,11 @@
 package com.proyect.movielists.presentation.screens.lists
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -42,12 +46,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.project.mytemplate.presentation.components.utils.Loading
 import com.proyect.movielists.domine.models.ListItem
+import com.proyect.movielists.domine.models.MovieFav
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -61,6 +70,7 @@ fun ListsScreen(
     val viewModel: ListsViewModel = koinViewModel()
     val isLoading = viewModel.isLoading.collectAsState()
     val moviesLists = viewModel.moviesLists.collectAsState()
+    val favorites = viewModel.favorites.collectAsState()
     val errorMessage = viewModel.errorMessage.collectAsState()
     val successMessage = viewModel.successMessage.collectAsState()
 
@@ -73,21 +83,24 @@ fun ListsScreen(
             Loading()
         } else {
             if(moviesLists.value.isNotEmpty()){
-                MovieLists(
-                    moviesLists = moviesLists.value,
-                    getListID = { listID ->
-                        navControllerAppNavigation.navigate("list/$listID")
-                        coroutineScope.launch {
-                            snackBarHostState.showSnackbar(
-                                message = listID.toString(),
-                                withDismissAction = true
-                            )
+                favorites.value?.let {
+                    MovieLists(
+                        favoriteList = it.results,
+                        moviesLists = moviesLists.value,
+                        getListID = { listID ->
+                            navControllerAppNavigation.navigate("list/$listID")
+                            coroutineScope.launch {
+                                snackBarHostState.showSnackbar(
+                                    message = listID.toString(),
+                                    withDismissAction = true
+                                )
+                            }
+                        },
+                        removeList = { listID ->
+                            viewModel.removeList(listID)
                         }
-                    },
-                    removeList = { listID ->
-                        viewModel.removeList(listID)
-                    }
-                )
+                    )
+                }
             } else {
                 Text(text = "No hay listas")
             }
@@ -125,6 +138,7 @@ fun ListsScreen(
 
 @Composable
 fun MovieLists(
+    favoriteList: List<MovieFav> = emptyList(),
     moviesLists: List<ListItem>,
     getListID: (Int) -> Unit,
     removeList: (Int) -> Unit
@@ -135,12 +149,9 @@ fun MovieLists(
             .padding(vertical = 10.dp)
     ) {
         //Lista de Peliculas favoritas
-//        item {
-//            ItemList(
-//                listItem = listItem,
-//                getListID = getListID
-//            )
-//        }
+        item {
+            FavoriteMoviesCarousel(favoriteList)
+        }
         items(moviesLists.size) { index ->
             val listItem = moviesLists[index]
             ItemList(
@@ -320,3 +331,116 @@ fun ItemList(
     }
     HorizontalDivider()
 }
+
+
+@Composable
+fun FavoriteMoviesCarousel(
+    favoriteMovies: List<MovieFav>,
+    modifier: Modifier = Modifier
+) {
+    if (favoriteMovies.isEmpty()) {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "No hay películas seleccionadas como favoritas.",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+    } else {
+        var selectedIndex by remember { mutableStateOf(0) }
+
+        Column(
+            modifier = modifier.fillMaxWidth()
+        ) {
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(favoriteMovies.size) { index ->
+                    val movie = favoriteMovies[index]
+                    MovieCarouselItem(
+                        movie = movie,
+                        modifier = Modifier
+                            .width(200.dp)
+                            .clickable { selectedIndex = index }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                repeat(favoriteMovies.size) { index ->
+                    Box(
+                        modifier = Modifier
+                            .size(8.dp)
+                            .padding(4.dp)
+                            .background(
+                                if (index == selectedIndex) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                                shape = CircleShape
+                            )
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MovieCarouselItem(
+    movie: MovieFav,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(8.dp),
+        modifier = modifier
+            .height(300.dp)
+            .padding(vertical = 8.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AsyncImage(
+                model = "https://image.tmdb.org/t/p/w500${movie.posterUrl}",
+                contentDescription = movie.title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
+                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = movie.title,
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = movie.releaseDate,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
+    }
+}
+

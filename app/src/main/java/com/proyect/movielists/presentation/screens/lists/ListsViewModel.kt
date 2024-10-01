@@ -3,8 +3,10 @@ package com.proyect.movielists.presentation.screens.lists
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.proyect.movielists.domine.models.ListItem
+import com.proyect.movielists.domine.models.MovieFavResponse
 import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
 import com.proyect.movielists.domine.usecase.CreateMovieListUseCase
+import com.proyect.movielists.domine.usecase.GetFavoriteUseCase
 import com.proyect.movielists.domine.usecase.RemoveMovieFromListUseCase
 import com.proyect.movielists.domine.usecase.RemoveListUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
@@ -19,7 +21,8 @@ class ListsViewModel(
     private val getMovieListsUseCase: GetMovieListsUseCase,
     private val addMovieToListUseCase: AddMovieToListUseCase,
     private val removeMovieFromListUseCase: RemoveMovieFromListUseCase,
-    private val removeListUseCase: RemoveListUseCase
+    private val removeListUseCase: RemoveListUseCase,
+    private val getFavoriteUseCase: GetFavoriteUseCase
 ) : ViewModel() {
 
 
@@ -33,10 +36,14 @@ class ListsViewModel(
     private val _moviesLists = MutableStateFlow<List<ListItem>>(emptyList())
     val moviesLists = _moviesLists.asStateFlow()
 
+    private val _favorites = MutableStateFlow<MovieFavResponse?>(null)
+    val favorites = _favorites.asStateFlow()
+
     private val _errorMessage = MutableStateFlow<String>("")
     val errorMessage = _errorMessage.asStateFlow()
 
     init{
+        getFavorites()
         getMovieLists()
     }
 
@@ -44,14 +51,29 @@ class ListsViewModel(
         _isLoading.value = value
     }
 
-    fun createMovieList(name: String, description: String, language: String) {
+    private fun getFavorites() {
         setLoading(true)
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = createMovieListUseCase.execute(name, description, language)) {
+            when (val result = getFavoriteUseCase.invoke()) {
                 is StatusResult.Success -> {
                     setLoading(false)
-                    getMovieLists()
-                    _successMessage.value = "Lista creada exitosamente"
+                    _favorites.value = result.value
+                }
+                is StatusResult.Error -> {
+                    setLoading(false)
+                    _errorMessage.value = result.message
+                }
+            }
+        }
+    }
+
+    private fun getMovieLists() {
+        setLoading(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = getMovieListsUseCase.execute()) {
+                is StatusResult.Success -> {
+                    setLoading(false)
+                    _moviesLists.value = result.value.results
                 }
 
                 is StatusResult.Error -> {
@@ -62,14 +84,14 @@ class ListsViewModel(
         }
     }
 
-
-    private fun getMovieLists() {
+    fun createMovieList(name: String, description: String, language: String) {
         setLoading(true)
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = getMovieListsUseCase.execute()) {
+            when (val result = createMovieListUseCase.execute(name, description, language)) {
                 is StatusResult.Success -> {
                     setLoading(false)
-                    _moviesLists.value = result.value.results
+                    getMovieLists()
+                    _successMessage.value = "Lista creada exitosamente"
                 }
 
                 is StatusResult.Error -> {

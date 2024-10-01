@@ -6,6 +6,8 @@ import com.proyect.movielists.data.models.dto.AvatarDto
 import com.proyect.movielists.data.models.dto.CollectionInfoDto
 import com.proyect.movielists.data.models.dto.CreateMovieListRequestDto
 import com.proyect.movielists.data.models.dto.CreateMovieListResponseDto
+import com.proyect.movielists.data.models.dto.FavoriteRequestDTO
+import com.proyect.movielists.data.models.dto.FavoriteResponseDTO
 import com.proyect.movielists.data.models.dto.GenreDto
 import com.proyect.movielists.data.models.dto.GetMovieListResponseDto
 import com.proyect.movielists.data.models.dto.RemoveMovieFromListRequestDto
@@ -17,6 +19,8 @@ import com.proyect.movielists.data.models.dto.ListItemDto
 import com.proyect.movielists.data.models.dto.LoginResponseDto
 import com.proyect.movielists.data.models.dto.MovieDetailsDto
 import com.proyect.movielists.data.models.dto.MovieDto
+import com.proyect.movielists.data.models.dto.MovieFavDTO
+import com.proyect.movielists.data.models.dto.MovieFavResponseDTO
 import com.proyect.movielists.data.models.dto.MovieItemDto
 import com.proyect.movielists.data.models.dto.MoviesResponseDto
 import com.proyect.movielists.data.models.dto.ProductionCompanyDto
@@ -31,6 +35,8 @@ import com.proyect.movielists.domine.models.Avatar
 import com.proyect.movielists.domine.models.CollectionInfo
 import com.proyect.movielists.domine.models.CreateMovieListRequest
 import com.proyect.movielists.domine.models.CreateMovieListResponse
+import com.proyect.movielists.domine.models.FavoriteRequest
+import com.proyect.movielists.domine.models.FavoriteResponse
 import com.proyect.movielists.domine.models.Genre
 import com.proyect.movielists.domine.models.GetMovieListResponse
 import com.proyect.movielists.domine.models.RemoveMovieFromListRequest
@@ -42,6 +48,8 @@ import com.proyect.movielists.domine.models.ListItem
 import com.proyect.movielists.domine.models.LoginResponse
 import com.proyect.movielists.domine.models.Movie
 import com.proyect.movielists.domine.models.MovieDetails
+import com.proyect.movielists.domine.models.MovieFav
+import com.proyect.movielists.domine.models.MovieFavResponse
 import com.proyect.movielists.domine.models.MovieItem
 import com.proyect.movielists.domine.models.MoviesResponse
 import com.proyect.movielists.domine.models.ProductionCompany
@@ -295,5 +303,58 @@ fun CollectionInfoDto.toCollectionInfo(): CollectionInfo {
         name = this.name,
         posterPath = this.posterPath,
         backdropPath = this.backdropPath
+    )
+}
+
+fun FavoriteRequestDTO.toDomain(): FavoriteRequest {
+    return FavoriteRequest(
+        mediaType = mediaType,
+        mediaId = mediaId,
+        isFavorite = favorite
+    )
+}
+
+fun FavoriteRequest.toData(): FavoriteRequestDTO {
+    return FavoriteRequestDTO(
+        mediaType = mediaType,
+        mediaId = mediaId,
+        favorite = isFavorite
+    )
+}
+
+
+fun FavoriteResponseDTO.toDomain(): FavoriteResponse {
+    return FavoriteResponse(
+        isSuccess = success,
+        code = statusCode,
+        message = statusMessage
+    )
+}
+
+fun MovieFavDTO.toDomain(): MovieFav {
+    return MovieFav(
+        id = id,
+        title = title,
+        originalTitle = originalTitle,
+        overview = overview,
+        posterUrl = posterPath?.let { "https://image.tmdb.org/t/p/w500$it" },
+        backdropUrl = backdropPath?.let { "https://image.tmdb.org/t/p/w500$it" },
+        releaseDate = releaseDate,
+        voteAverage = voteAverage,
+        voteCount = voteCount,
+        popularity = popularity,
+        adult = adult,
+        video = video,
+        originalLanguage = originalLanguage,
+        genreIds = genreIds
+    )
+}
+
+fun MovieFavResponseDTO.toDomain(): MovieFavResponse {
+    return MovieFavResponse(
+        page = page,
+        results = results.map { it.toDomain() },
+        totalPages = totalPages,
+        totalResults = totalResults
     )
 }
