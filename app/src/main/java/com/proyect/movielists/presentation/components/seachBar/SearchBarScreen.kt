@@ -10,7 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
-import com.proyect.movielists.presentation.components.utils.SearchMovieList
+import com.proyect.movielists.presentation.components.seachBar.component.SearchMovieList
+import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -26,13 +27,13 @@ fun SearchBarScreen(
     val viewModel: SearchBarViewModel = koinViewModel()
     var text by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
-    val listMovies = viewModel.listMovies.collectAsState()
+    val listMovies = viewModel.uiState.collectAsState()
 
     SearchBar(
         query = text,
         onQueryChange = {
             text = it
-            viewModel.someAuthenticatedRequest(text)
+            viewModel.searchMovies(text)
         },
         onSearch = {
             active = false
@@ -44,7 +45,9 @@ fun SearchBarScreen(
         },
     ) {
         SearchMovieList(
-            listMovies = listMovies.value,
+            listMovies = listMovies.value.let {
+                if (it is UIState.Success) it.data else emptyList()
+            },
             getMovieID = { movieId ->
                 navControllerAppNavigation.navigate("movie/$movieId")
                 coroutineScope.launch {

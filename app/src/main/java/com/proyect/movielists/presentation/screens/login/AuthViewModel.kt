@@ -7,6 +7,7 @@ import com.proyect.movielists.domine.usecase.CreateSessionUseCase
 import com.proyect.movielists.domine.usecase.RequestTokenUseCase
 import com.proyect.movielists.domine.usecase.ValidateLoginUseCase
 import com.proyect.movielists.utils.StatusResult
+import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -17,26 +18,19 @@ class AuthViewModel(
     private val createSessionUseCase: CreateSessionUseCase,
 ) : ViewModel() {
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading = _isLoading.asStateFlow()
-
-    private val _loginOK = MutableStateFlow(false)
-    val loginOK = _loginOK.asStateFlow()
-
-    private val _errorMessage = MutableStateFlow<String>("")
-    val errorMessage = _errorMessage.asStateFlow()
+    private val _uiState = MutableStateFlow<UIState<String>>(UIState.Idle)
+    val uiState = _uiState.asStateFlow()
 
     fun signIn(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            setLoading(true)
+            _uiState.value = UIState.Loading
             try {
-                requestToken()
+                val token = requestToken()
                 validateLogin(email, password)
-                createSession()
-
-
+                val sessionId = createSession()
+                _uiState.value = UIState.Success(sessionId)
             } catch (e: Exception) {
-                _errorMessage.value = e.message ?: "Error al iniciar sesion"
+                _uiState.value = UIState.Error(e.message ?: "Error al iniciar sesion")
             }
         }
     }
@@ -50,23 +44,17 @@ class AuthViewModel(
 
     private suspend fun validateLogin(email: String, password: String) {
         when (val result = validateLoginUseCase.invoke(email, password)) {
-            is StatusResult.Success -> Unit // Success, continuar con la siguiente fase
+            is StatusResult.Success -> Unit
             is StatusResult.Error -> throw Exception(result.message)
         }
     }
 
     private suspend fun createSession(): String {
         return when (val result = createSessionUseCase.invoke()) {
-            is StatusResult.Success -> {
-                _loginOK.value = true
-                result.value.session_id ?: throw Exception("Session ID not found")
-            }
+            is StatusResult.Success -> result.value.session_id ?: throw Exception("Session ID not found")
             is StatusResult.Error -> throw Exception(result.message)
         }
     }
 
-    private fun setLoading(value: Boolean) {
-        _isLoading.value = value
-    }
 }
 

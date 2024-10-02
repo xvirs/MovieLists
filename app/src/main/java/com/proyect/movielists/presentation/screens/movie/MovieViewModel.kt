@@ -9,7 +9,7 @@ import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
 import com.proyect.movielists.domine.usecase.GetMovieUseCase
 import com.proyect.movielists.utils.StatusResult
-import com.proyect.movielists.utils.UiState
+import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +22,7 @@ class MovieViewModel(
     private val addFavoriteUseCase: AddFavoriteUseCase
 ) : ViewModel() {
 
-    private val _movieState = MutableStateFlow<UiState<MovieDetails>>(UiState.Loading)
+    private val _movieState = MutableStateFlow<UIState<MovieDetails>>(UIState.Loading)
     val movieState = _movieState.asStateFlow()
 
     private val _backgroundImage = MutableStateFlow<String?>("")
@@ -38,16 +38,16 @@ class MovieViewModel(
     val errorMessage = _errorMessage.asStateFlow()
 
     fun getMovie(movieID: String) {
-        _movieState.value = UiState.Loading
+        _movieState.value = UIState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = getMovieUseCase.invoke(movieID)) {
                 is StatusResult.Error -> {
-                    _movieState.value = UiState.Error(response.message)
+                    _movieState.value = UIState.Error(response.message)
                 }
                 is StatusResult.Success -> {
                     getMovieLists()
                     _backgroundImage.value = response.value.backdropPath
-                    _movieState.value = UiState.Success(response.value)
+                    _movieState.value = UIState.Success(response.value)
                 }
             }
         }

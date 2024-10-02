@@ -9,7 +9,7 @@ import com.proyect.movielists.domine.usecase.GetMovieListUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
 import com.proyect.movielists.domine.usecase.RemoveListUseCase
 import com.proyect.movielists.domine.usecase.RemoveMovieFromListUseCase
-import com.proyect.movielists.utils.UiState
+import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +22,7 @@ class ListViewModel(
     private val getMovieListUseCase : GetMovieListUseCase
 ) : ViewModel() {
 
-    private val _listDetailsState = MutableStateFlow<UiState<GetMovieListResponse>>(UiState.Loading)
+    private val _listDetailsState = MutableStateFlow<UIState<GetMovieListResponse>>(UIState.Loading)
     val listDetailsState = _listDetailsState.asStateFlow()
 
     private val _successMessage = MutableStateFlow<String>("")
@@ -35,14 +35,14 @@ class ListViewModel(
     val listMovies = _listMovies.asStateFlow()
 
     fun getListDetails( listId: String) {
-        _listDetailsState.value = UiState.Loading
+        _listDetailsState.value = UIState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = getMovieListUseCase.execute(listId)) {
                 is StatusResult.Success -> {
-                    _listDetailsState.value = UiState.Success(result.value)
+                    _listDetailsState.value = UIState.Success(result.value)
                 }
                 is StatusResult.Error -> {
-                    _listDetailsState.value = UiState.Error(result.message)
+                    _listDetailsState.value = UIState.Error(result.message)
                 }
             }
         }
