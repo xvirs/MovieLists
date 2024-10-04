@@ -2,12 +2,11 @@ package com.proyect.movielists.presentation.components.seachBar.component
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
-import com.proyect.movielists.domine.models.Movie
-
+import com.proyect.movielists.presentation.models.MovieUI
 
 @Composable
 fun SearchMovieList(
-    listMovies: List<Movie>?,
+    listMovies: List<MovieUI>?,
     getMovieID: (Int) -> Unit
 ) {
     LazyColumn() {
@@ -20,7 +19,6 @@ fun SearchMovieList(
                     )
                 }
             }
-
         }
     }
 }

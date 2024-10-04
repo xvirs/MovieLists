@@ -1,7 +1,7 @@
 package com.proyect.movielists.data.datasource
 
 import com.proyect.movielists.data.interfaces.MovieDataSource
-import com.proyect.movielists.data.models.dto.MovieDetailsDto
+import com.proyect.movielists.data.models.MovieDetailsDto
 import com.proyect.movielists.data.network.BaseClient
 import com.proyect.movielists.utils.StatusResult
 import io.ktor.client.call.body

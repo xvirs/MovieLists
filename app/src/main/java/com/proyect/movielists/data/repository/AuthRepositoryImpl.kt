@@ -2,53 +2,45 @@ package com.proyect.movielists.data.repository
 
 import com.proyect.movielists.data.interfaces.AuthDataSource
 import com.proyect.movielists.data.interfaces.SessionDataStore
-import com.proyect.movielists.data.mappers.toLoginResponse
-import com.proyect.movielists.data.mappers.toSessionTokenResponse
-import com.proyect.movielists.data.models.dto.LoginRequestDto
-import com.proyect.movielists.data.models.dto.SessionTokenRequestDto
+import com.proyect.movielists.data.models.mappers.toSessionTokenResponse
+import com.proyect.movielists.data.models.LoginRequestDto
+import com.proyect.movielists.data.models.SessionTokenRequestDto
 import com.proyect.movielists.domine.interfaces.AuthRepository
-import com.proyect.movielists.domine.models.LoginResponse
 import com.proyect.movielists.domine.models.SessionTokenResponse
 import com.proyect.movielists.utils.StatusResult
-import kotlinx.coroutines.flow.first
 
-class AuthRepositoryImpl(private val authDataSource : AuthDataSource, private val sessionDataStore : SessionDataStore) : AuthRepository {
-    override suspend fun requestToken(): StatusResult<LoginResponse> {
-        return when(val result = authDataSource.requestToken()) {
-            is StatusResult.Success ->{
-                sessionDataStore.saveSessionId(result.value.requestToken!!)
-                StatusResult.Success(result.value.toLoginResponse())
-            }
-            is StatusResult.Error -> StatusResult.Error(result.message)
-        }
-    }
+class AuthRepositoryImpl(
+    private val authDataSource: AuthDataSource,
+    private val sessionDataStore: SessionDataStore
+) : AuthRepository {
 
-    override suspend fun validateLogin(
-        username: String,
-        password: String
-    ): StatusResult<LoginResponse> {
-        val requestToken = when (sessionDataStore.sessionIdFlow.first()){
-            is StatusResult.Success -> (sessionDataStore.sessionIdFlow.first() as StatusResult.Success<String?>).value
-            is StatusResult.Error -> null
-        }
-        return when(val result = authDataSource.validateLogin(LoginRequestDto(username, password, requestToken.toString()))) {
-            is StatusResult.Success -> StatusResult.Success(result.value.toLoginResponse())
-            is StatusResult.Error -> StatusResult.Error(result.message)
-        }
-    }
-
-    override suspend fun createSession(): StatusResult<SessionTokenResponse> {
-        val requestToken = when (sessionDataStore.sessionIdFlow.first()){
-            is StatusResult.Success -> (sessionDataStore.sessionIdFlow.first() as StatusResult.Success<String?>).value
-            is StatusResult.Error -> null
-        }
-        return when(val result = authDataSource.createSession(SessionTokenRequestDto(requestToken.toString()))) {
+    override suspend fun login(
+        email: String, password: String
+    ): StatusResult<SessionTokenResponse> {
+        when (val requestTokenImpl = authDataSource.requestToken()) {
             is StatusResult.Success -> {
-                sessionDataStore.saveSessionId(result.value.sessionId!!)
-                StatusResult.Success(result.value.toSessionTokenResponse())
+                when (val validateLoginImpl = authDataSource.validateLogin(
+                    LoginRequestDto(
+                        email,
+                        password,
+                        requestTokenImpl.value.requestToken
+                    )
+                )) {
+                    is StatusResult.Success -> {
+                        when (val createSessionImpl =
+                            authDataSource.createSession(SessionTokenRequestDto(validateLoginImpl.value.requestToken))) {
+                            is StatusResult.Success -> {
+                                sessionDataStore.saveSessionId(createSessionImpl.value.sessionId!!)
+                                return StatusResult.Success(createSessionImpl.value.toSessionTokenResponse())
+                            }
+
+                            is StatusResult.Error -> return StatusResult.Error(createSessionImpl.message)
+                        }
+                    }
+                    is StatusResult.Error -> return StatusResult.Error(validateLoginImpl.message)
+                }
             }
-            is StatusResult.Error -> StatusResult.Error(result.message)
+            is StatusResult.Error -> return StatusResult.Error(requestTokenImpl.message)
         }
     }
-
 }

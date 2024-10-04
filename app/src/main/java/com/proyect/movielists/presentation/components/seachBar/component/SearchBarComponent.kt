@@ -21,11 +21,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.proyect.movielists.domine.models.Movie
+import com.proyect.movielists.presentation.models.MovieUI
 
 @Composable
 fun ItemMovieSearching(
-    movie: Movie?,
+    movie: MovieUI?,
     getMovieID: (Int) -> Unit,
 ) {
     Card(
@@ -46,7 +46,7 @@ fun ItemMovieSearching(
             ) {
                 if (movie != null) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
+                        model = "https://image.tmdb.org/t/p/w500${movie.posterUrl}",
                         contentDescription = "Portada Movie",
                         modifier = Modifier.fillMaxSize()
                     )

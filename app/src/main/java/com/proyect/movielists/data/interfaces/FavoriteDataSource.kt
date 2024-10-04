@@ -1,8 +1,8 @@
 package com.proyect.movielists.data.interfaces
 
-import com.proyect.movielists.data.models.dto.FavoriteRequestDTO
-import com.proyect.movielists.data.models.dto.FavoriteResponseDTO
-import com.proyect.movielists.data.models.dto.MovieFavResponseDTO
+import com.proyect.movielists.data.models.FavoriteRequestDTO
+import com.proyect.movielists.data.models.FavoriteResponseDTO
+import com.proyect.movielists.data.models.MovieFavResponseDTO
 import com.proyect.movielists.utils.StatusResult
 
 interface FavoriteDataSource {

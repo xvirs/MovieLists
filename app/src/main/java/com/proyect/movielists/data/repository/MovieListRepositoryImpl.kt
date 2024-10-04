@@ -2,8 +2,8 @@ package com.proyect.movielists.data.repository
 
 import com.proyect.movielists.data.interfaces.MovieListDataSource
 import com.proyect.movielists.data.interfaces.SessionDataStore
-import com.proyect.movielists.data.mappers.toDataModel
-import com.proyect.movielists.data.mappers.toDomainModel
+import com.proyect.movielists.data.models.mappers.toDataModel
+import com.proyect.movielists.data.models.mappers.toDomainModel
 import com.proyect.movielists.domine.interfaces.MovieListRepository
 import com.proyect.movielists.domine.models.AddMovieToListRequest
 import com.proyect.movielists.domine.models.AddMovieToListResponse

@@ -23,11 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.proyect.movielists.domine.models.ListItem
+import com.proyect.movielists.presentation.models.ListItemUI
 
 @Composable
 fun ItemList(
-    listItem: ListItem,
+    listItem: ListItemUI,
     getListID: (Int) -> Unit,
     removeList: (Int) -> Unit
 ) {

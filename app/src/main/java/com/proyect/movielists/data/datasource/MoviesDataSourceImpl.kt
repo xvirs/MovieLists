@@ -1,7 +1,7 @@
 package com.proyect.movielists.data.datasource
 
 import com.proyect.movielists.data.interfaces.MoviesDataSource
-import com.proyect.movielists.data.models.dto.MoviesResponseDto
+import com.proyect.movielists.data.models.MoviesResponseDto
 import com.proyect.movielists.data.network.BaseClient
 import com.proyect.movielists.utils.MovieListType
 import com.proyect.movielists.utils.StatusResult

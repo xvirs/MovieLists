@@ -11,11 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.proyect.movielists.domine.models.ListItem
+import com.proyect.movielists.presentation.models.ListItemUI
 
 @Composable
 fun MovieLists(
-    moviesLists: List<ListItem> = emptyList(),
+    moviesLists: List<ListItemUI> = emptyList(),
     getListID: (Int) -> Unit,
     removeList: (Int) -> Unit
 ) {

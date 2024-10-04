@@ -1,34 +1,33 @@
-package com.proyect.movielists.data.mappers
+package com.proyect.movielists.data.models.mappers
 
-import com.proyect.movielists.data.models.dto.AddMovieToListRequestDto
-import com.proyect.movielists.data.models.dto.AddMovieToListResponseDto
-import com.proyect.movielists.data.models.dto.AvatarDto
-import com.proyect.movielists.data.models.dto.CollectionInfoDto
-import com.proyect.movielists.data.models.dto.CreateMovieListRequestDto
-import com.proyect.movielists.data.models.dto.CreateMovieListResponseDto
-import com.proyect.movielists.data.models.dto.FavoriteRequestDTO
-import com.proyect.movielists.data.models.dto.FavoriteResponseDTO
-import com.proyect.movielists.data.models.dto.GenreDto
-import com.proyect.movielists.data.models.dto.GetMovieListResponseDto
-import com.proyect.movielists.data.models.dto.RemoveMovieFromListRequestDto
-import com.proyect.movielists.data.models.dto.RemoveMovieFromListResponseDto
-import com.proyect.movielists.data.models.dto.RemoveListResponseDto
-import com.proyect.movielists.data.models.dto.GetMovieListsResponseDto
-import com.proyect.movielists.data.models.dto.GravatarDto
-import com.proyect.movielists.data.models.dto.ListItemDto
-import com.proyect.movielists.data.models.dto.LoginResponseDto
-import com.proyect.movielists.data.models.dto.MovieDetailsDto
-import com.proyect.movielists.data.models.dto.MovieDto
-import com.proyect.movielists.data.models.dto.MovieFavDTO
-import com.proyect.movielists.data.models.dto.MovieFavResponseDTO
-import com.proyect.movielists.data.models.dto.MovieItemDto
-import com.proyect.movielists.data.models.dto.MoviesResponseDto
-import com.proyect.movielists.data.models.dto.ProductionCompanyDto
-import com.proyect.movielists.data.models.dto.ProductionCountryDto
-import com.proyect.movielists.data.models.dto.SessionTokenResponseDto
-import com.proyect.movielists.data.models.dto.SpokenLanguageDto
-import com.proyect.movielists.data.models.dto.TmdbDto
-import com.proyect.movielists.data.models.dto.UserProfileDto
+import com.proyect.movielists.data.models.AddMovieToListRequestDto
+import com.proyect.movielists.data.models.AddMovieToListResponseDto
+import com.proyect.movielists.data.models.AvatarDto
+import com.proyect.movielists.data.models.CollectionInfoDto
+import com.proyect.movielists.data.models.CreateMovieListRequestDto
+import com.proyect.movielists.data.models.CreateMovieListResponseDto
+import com.proyect.movielists.data.models.FavoriteRequestDTO
+import com.proyect.movielists.data.models.FavoriteResponseDTO
+import com.proyect.movielists.data.models.GenreDto
+import com.proyect.movielists.data.models.GetMovieListResponseDto
+import com.proyect.movielists.data.models.RemoveMovieFromListRequestDto
+import com.proyect.movielists.data.models.RemoveMovieFromListResponseDto
+import com.proyect.movielists.data.models.RemoveListResponseDto
+import com.proyect.movielists.data.models.GetMovieListsResponseDto
+import com.proyect.movielists.data.models.GravatarDto
+import com.proyect.movielists.data.models.ListItemDto
+import com.proyect.movielists.data.models.MovieDetailsDto
+import com.proyect.movielists.data.models.MovieDto
+import com.proyect.movielists.data.models.MovieFavDTO
+import com.proyect.movielists.data.models.MovieFavResponseDTO
+import com.proyect.movielists.data.models.MovieItemDto
+import com.proyect.movielists.data.models.MoviesResponseDto
+import com.proyect.movielists.data.models.ProductionCompanyDto
+import com.proyect.movielists.data.models.ProductionCountryDto
+import com.proyect.movielists.data.models.SessionTokenResponseDto
+import com.proyect.movielists.data.models.SpokenLanguageDto
+import com.proyect.movielists.data.models.TmdbDto
+import com.proyect.movielists.data.models.UserProfileDto
 import com.proyect.movielists.domine.models.AddMovieToListRequest
 import com.proyect.movielists.domine.models.AddMovieToListResponse
 import com.proyect.movielists.domine.models.Avatar
@@ -45,7 +44,6 @@ import com.proyect.movielists.domine.models.RemoveListResponse
 import com.proyect.movielists.domine.models.GetMovieListsResponse
 import com.proyect.movielists.domine.models.Gravatar
 import com.proyect.movielists.domine.models.ListItem
-import com.proyect.movielists.domine.models.LoginResponse
 import com.proyect.movielists.domine.models.Movie
 import com.proyect.movielists.domine.models.MovieDetails
 import com.proyect.movielists.domine.models.MovieFav
@@ -59,13 +57,6 @@ import com.proyect.movielists.domine.models.SpokenLanguage
 import com.proyect.movielists.domine.models.Tmdb
 import com.proyect.movielists.domine.models.UserProfile
 
-fun LoginResponseDto.toLoginResponse(): LoginResponse {
-    return LoginResponse(
-        success = this.success,
-        expires_at = this.expiresAt,
-        request_token = this.requestToken
-    )
-}
 
 fun SessionTokenResponseDto.toSessionTokenResponse(): SessionTokenResponse {
     return SessionTokenResponse(

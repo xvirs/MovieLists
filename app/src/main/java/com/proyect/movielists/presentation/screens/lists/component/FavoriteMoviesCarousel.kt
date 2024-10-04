@@ -35,11 +35,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.proyect.movielists.domine.models.MovieFav
+import com.proyect.movielists.presentation.models.MovieFavUI
 
 @Composable
 fun FavoriteMoviesCarousel(
-    favoriteMovies: List<MovieFav> = emptyList()
+    favoriteMovies: List<MovieFavUI> = emptyList()
 ) {
     if (favoriteMovies.isEmpty()) {
         Box(
@@ -101,7 +101,7 @@ fun FavoriteMoviesCarousel(
 
 @Composable
 fun MovieCarouselItem(
-    movie: MovieFav,
+    movie: MovieFavUI,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -145,4 +145,3 @@ fun MovieCarouselItem(
         }
     }
 }
-

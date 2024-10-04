@@ -2,13 +2,14 @@ package com.proyect.movielists.presentation.screens.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.proyect.movielists.domine.models.GetMovieListResponse
 import com.proyect.movielists.utils.StatusResult
-import com.proyect.movielists.domine.models.ListItem
 import com.proyect.movielists.domine.usecase.GetMovieListUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
 import com.proyect.movielists.domine.usecase.RemoveListUseCase
 import com.proyect.movielists.domine.usecase.RemoveMovieFromListUseCase
+import com.proyect.movielists.presentation.models.ListItemUI
+import com.proyect.movielists.presentation.models.MovieListUI
+import com.proyect.movielists.presentation.models.mappers.toMovieListUI
 import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,7 @@ class ListViewModel(
     private val getMovieListUseCase : GetMovieListUseCase
 ) : ViewModel() {
 
-    private val _listDetailsState = MutableStateFlow<UIState<GetMovieListResponse>>(UIState.Loading)
+    private val _listDetailsState = MutableStateFlow<UIState<MovieListUI>>(UIState.Loading)
     val listDetailsState = _listDetailsState.asStateFlow()
 
     private val _successMessage = MutableStateFlow<String>("")
@@ -31,7 +32,7 @@ class ListViewModel(
     private val _errorMessage = MutableStateFlow<String>("")
     val errorMessage = _errorMessage.asStateFlow()
 
-    private val _listMovies = MutableStateFlow<List<ListItem>>(emptyList())
+    private val _listMovies = MutableStateFlow<List<ListItemUI>>(emptyList())
     val listMovies = _listMovies.asStateFlow()
 
     fun getListDetails( listId: String) {
@@ -39,7 +40,7 @@ class ListViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = getMovieListUseCase.execute(listId)) {
                 is StatusResult.Success -> {
-                    _listDetailsState.value = UIState.Success(result.value)
+                    _listDetailsState.value = UIState.Success(result.value.toMovieListUI())
                 }
                 is StatusResult.Error -> {
                     _listDetailsState.value = UIState.Error(result.message)

@@ -2,14 +2,15 @@ package com.proyect.movielists.presentation.screens.lists
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.proyect.movielists.domine.models.ListItem
-import com.proyect.movielists.domine.models.MovieFav
 import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
 import com.proyect.movielists.domine.usecase.CreateMovieListUseCase
 import com.proyect.movielists.domine.usecase.GetFavoriteUseCase
 import com.proyect.movielists.domine.usecase.RemoveMovieFromListUseCase
 import com.proyect.movielists.domine.usecase.RemoveListUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
+import com.proyect.movielists.presentation.models.ListItemUI
+import com.proyect.movielists.presentation.models.MovieFavUI
+import com.proyect.movielists.presentation.models.mappers.toUIModel
 import com.proyect.movielists.utils.StatusResult
 import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.Dispatchers
@@ -32,10 +33,10 @@ class ListsViewModel(
     private val _successMessage = MutableStateFlow<String>("")
     val successMessage = _successMessage.asStateFlow()
 
-    private val _moviesLists = MutableStateFlow<List<ListItem>>(emptyList())
+    private val _moviesLists = MutableStateFlow<List<ListItemUI>>(emptyList())
     val moviesLists = _moviesLists.asStateFlow()
 
-    private val _favorites = MutableStateFlow<List<MovieFav>>(emptyList())
+    private val _favorites = MutableStateFlow<List<MovieFavUI>>(emptyList())
     val favorites = _favorites.asStateFlow()
 
     private val _errorMessage = MutableStateFlow<String>("")
@@ -51,7 +52,7 @@ class ListsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = getFavoriteUseCase.invoke()) {
                 is StatusResult.Success -> {
-                    _favorites.value = result.value.results
+                    _favorites.value = UIState.Success(result.value.results.map { it.toUIModel() }).data
                 }
                 is StatusResult.Error -> _uiState.value = UIState.Error(result.message)
             }
@@ -64,7 +65,7 @@ class ListsViewModel(
             when (val result = getMovieListsUseCase.execute()) {
                 is StatusResult.Success -> {
                     _uiState.value = UIState.Success("")
-                    _moviesLists.value = result.value.results
+                    _moviesLists.value = UIState.Success(result.value.results.map { it.toUIModel() }).data
                 }
 
                 is StatusResult.Error -> _uiState.value = UIState.Error(result.message)

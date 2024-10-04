@@ -15,7 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.proyect.movielists.presentation.components.shared.Loading
-import com.proyect.movielists.domine.models.MovieDetails
+import com.proyect.movielists.presentation.models.MovieDetailsUI
 import com.proyect.movielists.presentation.screens.movie.component.MovieBottomBar
 import com.proyect.movielists.presentation.screens.movie.component.MovieDetailsContent
 import com.proyect.movielists.presentation.screens.movie.component.MovieTopBar
@@ -28,7 +28,7 @@ fun MovieScreen(
     onBackPress: () -> Unit,
 ) {
     val viewModel: MovieViewModel = koinViewModel()
-    val movieState by viewModel.movieState.collectAsState()
+    val movieState by viewModel.movieDetail.collectAsState()
     val movieList by viewModel.moviesLists.collectAsState()
 
     LaunchedEffect(movieId) {
@@ -59,7 +59,7 @@ fun MovieScreen(
                     }
 
                     is UIState.Success -> {
-                        val movie = (movieState as UIState.Success<MovieDetails>).data
+                        val movie = (movieState as UIState.Success<MovieDetailsUI>).data
                         MovieDetailsContent(movie)
                     }
 

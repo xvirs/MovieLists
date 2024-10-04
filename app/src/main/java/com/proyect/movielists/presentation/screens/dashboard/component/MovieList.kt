@@ -20,12 +20,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.proyect.movielists.domine.models.Movie
+import com.proyect.movielists.presentation.models.MovieUI
 
 
 @Composable
 fun MovieList(
-    listMovies: List<Movie>?,
+    listMovies: List<MovieUI>?,
     onTap: (Int) -> Unit,
     onLongPress: (Int) -> Unit
 ){
@@ -45,7 +45,7 @@ fun MovieList(
 
 @Composable
 fun ItemMovie(
-    movie: Movie?,
+    movie: MovieUI?,
     onTap: (Int) -> Unit,
     onLongPress: (Int) -> Unit
 ) {
@@ -76,7 +76,7 @@ fun ItemMovie(
             ) {
                 AsyncImage(
                     modifier = Modifier.fillMaxWidth(),
-                    model = "https://image.tmdb.org/t/p/w500${movie?.backdropPath}",
+                    model = "https://image.tmdb.org/t/p/w500${movie?.backdropUrl}",
                     contentDescription = "Portada Product"
                 )
             }

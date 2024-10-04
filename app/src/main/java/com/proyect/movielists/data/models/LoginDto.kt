@@ -1,4 +1,4 @@
-package com.proyect.movielists.data.models.dto
+package com.proyect.movielists.data.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class LoginResponseDto (
     val success: Boolean? = null,
     @SerialName("expires_at") val expiresAt: String? = null,
-    @SerialName("request_token") val requestToken: String? = null
+    @SerialName("request_token") val requestToken: String
 )
 
 

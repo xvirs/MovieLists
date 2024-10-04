@@ -1,14 +1,14 @@
 package com.proyect.movielists.data.interfaces
 
-import com.proyect.movielists.data.models.dto.AddMovieToListRequestDto
-import com.proyect.movielists.data.models.dto.AddMovieToListResponseDto
-import com.proyect.movielists.data.models.dto.CreateMovieListRequestDto
-import com.proyect.movielists.data.models.dto.CreateMovieListResponseDto
-import com.proyect.movielists.data.models.dto.GetMovieListResponseDto
-import com.proyect.movielists.data.models.dto.RemoveMovieFromListRequestDto
-import com.proyect.movielists.data.models.dto.RemoveMovieFromListResponseDto
-import com.proyect.movielists.data.models.dto.RemoveListResponseDto
-import com.proyect.movielists.data.models.dto.GetMovieListsResponseDto
+import com.proyect.movielists.data.models.AddMovieToListRequestDto
+import com.proyect.movielists.data.models.AddMovieToListResponseDto
+import com.proyect.movielists.data.models.CreateMovieListRequestDto
+import com.proyect.movielists.data.models.CreateMovieListResponseDto
+import com.proyect.movielists.data.models.GetMovieListResponseDto
+import com.proyect.movielists.data.models.RemoveMovieFromListRequestDto
+import com.proyect.movielists.data.models.RemoveMovieFromListResponseDto
+import com.proyect.movielists.data.models.RemoveListResponseDto
+import com.proyect.movielists.data.models.GetMovieListsResponseDto
 import com.proyect.movielists.utils.StatusResult
 
 interface MovieListDataSource {

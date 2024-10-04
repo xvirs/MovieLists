@@ -1,9 +1,9 @@
 package com.proyect.movielists.data.datasource
 
 import com.proyect.movielists.data.interfaces.FavoriteDataSource
-import com.proyect.movielists.data.models.dto.FavoriteRequestDTO
-import com.proyect.movielists.data.models.dto.FavoriteResponseDTO
-import com.proyect.movielists.data.models.dto.MovieFavResponseDTO
+import com.proyect.movielists.data.models.FavoriteRequestDTO
+import com.proyect.movielists.data.models.FavoriteResponseDTO
+import com.proyect.movielists.data.models.MovieFavResponseDTO
 import com.proyect.movielists.data.network.BaseClient
 import com.proyect.movielists.utils.StatusResult
 import io.ktor.client.call.body

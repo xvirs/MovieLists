@@ -14,11 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.proyect.movielists.domine.models.MovieItem
+import com.proyect.movielists.presentation.models.MovieUI
 
 @Composable
 fun MovieItem(
-    movie: MovieItem,
+    movie: MovieUI,
     onRemoveMovie: () -> Unit
 ) {
     Row(

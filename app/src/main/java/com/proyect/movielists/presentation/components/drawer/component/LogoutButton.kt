@@ -12,10 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LogoutButton() {
+fun LogoutButton(
+    navigateToLogin: () -> Unit
+) {
     Button(
         onClick = {
-            // Acción del botón de logout
+            navigateToLogin()
         },
         modifier = Modifier
             .fillMaxWidth()

@@ -2,12 +2,13 @@ package com.proyect.movielists.presentation.screens.movie
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.proyect.movielists.domine.models.ListItem
-import com.proyect.movielists.domine.models.MovieDetails
 import com.proyect.movielists.domine.usecase.AddFavoriteUseCase
 import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
 import com.proyect.movielists.domine.usecase.GetMovieUseCase
+import com.proyect.movielists.presentation.models.ListItemUI
+import com.proyect.movielists.presentation.models.MovieDetailsUI
+import com.proyect.movielists.presentation.models.mappers.toUIModel
 import com.proyect.movielists.utils.StatusResult
 import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.Dispatchers
@@ -22,13 +23,13 @@ class MovieViewModel(
     private val addFavoriteUseCase: AddFavoriteUseCase
 ) : ViewModel() {
 
-    private val _movieState = MutableStateFlow<UIState<MovieDetails>>(UIState.Loading)
-    val movieState = _movieState.asStateFlow()
+    private val _movieDetail = MutableStateFlow<UIState<MovieDetailsUI>>(UIState.Loading)
+    val movieDetail = _movieDetail.asStateFlow()
 
     private val _backgroundImage = MutableStateFlow<String?>("")
     val backgroundImage = _backgroundImage.asStateFlow()
 
-    private val _moviesLists = MutableStateFlow<List<ListItem>>(emptyList())
+    private val _moviesLists = MutableStateFlow<List<ListItemUI>>(emptyList())
     val moviesLists = _moviesLists.asStateFlow()
 
     private val _successMessage = MutableStateFlow<String>("")
@@ -38,16 +39,16 @@ class MovieViewModel(
     val errorMessage = _errorMessage.asStateFlow()
 
     fun getMovie(movieID: String) {
-        _movieState.value = UIState.Loading
+        _movieDetail.value = UIState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = getMovieUseCase.invoke(movieID)) {
                 is StatusResult.Error -> {
-                    _movieState.value = UIState.Error(response.message)
+                    _movieDetail.value = UIState.Error(response.message)
                 }
                 is StatusResult.Success -> {
                     getMovieLists()
                     _backgroundImage.value = response.value.backdropPath
-                    _movieState.value = UIState.Success(response.value)
+                    _movieDetail.value = UIState.Success(response.value.toUIModel())
                 }
             }
         }
@@ -57,7 +58,7 @@ class MovieViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = getMovieListsUseCase.execute()) {
                 is StatusResult.Success -> {
-                    _moviesLists.value = result.value.results
+                    _moviesLists.value = result.value.results.map { it.toUIModel() }
                 }
 
                 is StatusResult.Error -> {

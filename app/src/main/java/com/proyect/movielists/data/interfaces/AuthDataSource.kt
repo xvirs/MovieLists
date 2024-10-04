@@ -1,9 +1,9 @@
 package com.proyect.movielists.data.interfaces
 
-import com.proyect.movielists.data.models.dto.LoginRequestDto
-import com.proyect.movielists.data.models.dto.LoginResponseDto
-import com.proyect.movielists.data.models.dto.SessionTokenRequestDto
-import com.proyect.movielists.data.models.dto.SessionTokenResponseDto
+import com.proyect.movielists.data.models.LoginRequestDto
+import com.proyect.movielists.data.models.LoginResponseDto
+import com.proyect.movielists.data.models.SessionTokenRequestDto
+import com.proyect.movielists.data.models.SessionTokenResponseDto
 import com.proyect.movielists.utils.StatusResult
 
 interface AuthDataSource {

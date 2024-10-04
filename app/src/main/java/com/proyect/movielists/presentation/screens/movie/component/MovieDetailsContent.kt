@@ -30,11 +30,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.proyect.movielists.domine.models.MovieDetails
+import com.proyect.movielists.presentation.models.MovieDetailsUI
 
 @Composable
-fun MovieDetailsContent(movie: MovieDetails) {
-    val imageUrl = "https://image.tmdb.org/t/p/w500${movie.backdropPath}"
+fun MovieDetailsContent(movie: MovieDetailsUI) {
+    val imageUrl = "https://image.tmdb.org/t/p/w500${movie.backdropUrl}"
 
     Column(
         modifier = Modifier

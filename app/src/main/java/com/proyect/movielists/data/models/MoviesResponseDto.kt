@@ -1,4 +1,4 @@
-package com.proyect.movielists.data.models.dto
+package com.proyect.movielists.data.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

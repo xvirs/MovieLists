@@ -1,7 +1,7 @@
 package com.proyect.movielists.data.repository
 
 import com.proyect.movielists.data.interfaces.MovieDataSource
-import com.proyect.movielists.data.mappers.toMovieDetails
+import com.proyect.movielists.data.models.mappers.toMovieDetails
 import com.proyect.movielists.domine.interfaces.MovieRepository
 import com.proyect.movielists.domine.models.MovieDetails
 import com.proyect.movielists.utils.StatusResult

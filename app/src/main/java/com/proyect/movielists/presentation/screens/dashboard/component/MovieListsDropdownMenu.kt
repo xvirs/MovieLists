@@ -6,12 +6,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextOverflow
-import com.proyect.movielists.domine.models.ListItem
+import com.proyect.movielists.presentation.models.ListItemUI
 import com.proyect.movielists.utils.UIState
 
 @Composable
 fun MovieListsDropdownMenu(
-    movieListsState: UIState<List<ListItem>>,
+    movieListsState: UIState<List<ListItemUI>>,
     expandMenu: Boolean,
     onDismissMenu: () -> Unit,
     onMovieListSelected: (String) -> Unit

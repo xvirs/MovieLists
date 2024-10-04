@@ -10,10 +10,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import com.proyect.movielists.presentation.components.shared.Loading
-import com.proyect.movielists.presentation.screens.login.component.ErrorMessage
 import com.proyect.movielists.presentation.screens.login.component.LoginForm
 import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -26,23 +26,39 @@ fun LoginScreen(
     var email by remember { mutableStateOf("XavierRosales") }
     var password by remember { mutableStateOf("reyvax15408571") }
     val uiState by viewModel.uiState.collectAsState()
+    var message by remember { mutableStateOf("") }
+
+    LaunchedEffect(message) {
+        if (message.isNotEmpty()) {
+            coroutineScope.launch {
+                snackBarHostState.showSnackbar(
+                    message = message,
+                    withDismissAction = true
+                )
+            }
+        }
+    }
 
     when (uiState) {
         is UIState.Loading -> Loading()
         is UIState.Success -> {
             LaunchedEffect(Unit) {
-                navController.navigate("main")
+                navController.navigate("main"){
+                    popUpTo(navController.graph.startDestinationId) {
+                        inclusive = true
+                    }
+                }
             }
         }
         is UIState.Error -> {
-            ErrorMessage((uiState as UIState.Error).message)
+            message = "Error al iniciar sesion"
             LoginForm(
                 email = email,
                 password = password,
                 onEmailChange = { email = it },
                 onPasswordChange = { password = it },
                 onLoginClick = {
-                    viewModel.signIn(email, password)
+                    viewModel.login(email, password)
                 }
             )
         }
@@ -53,7 +69,7 @@ fun LoginScreen(
             onEmailChange = { email = it },
             onPasswordChange = { password = it },
             onLoginClick = {
-                viewModel.signIn(email, password)
+                viewModel.login(email, password)
             }
         )
     }

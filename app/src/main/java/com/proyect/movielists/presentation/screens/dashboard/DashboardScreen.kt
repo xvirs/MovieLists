@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.proyect.movielists.presentation.components.shared.Loading
-import com.proyect.movielists.domine.models.Movie
+import com.proyect.movielists.presentation.models.MovieUI
 import com.proyect.movielists.presentation.screens.dashboard.component.FilterChipLazyRow
 import com.proyect.movielists.presentation.screens.dashboard.component.MovieListsDropdownMenu
 import com.proyect.movielists.presentation.screens.dashboard.component.MoviesContent
@@ -53,14 +53,13 @@ fun DashboardScreen(
                 }
             )
 
-            // Manejo del estado de las películas directamente aquí
             when (moviesState) {
                 is UIState.Loading -> {
-                    Loading() // Componente que ocupará toda el área
+                    Loading()
                 }
                 is UIState.Success -> {
                     MoviesContent(
-                        movies = (moviesState as UIState.Success<List<Movie>>).data,
+                        movies = (moviesState as UIState.Success<List<MovieUI>>).data,
                         onTapMovie = { movieId ->
                             navControllerAppNavigation.navigate("movie/$movieId")
                             coroutineScope.launch {
@@ -83,9 +82,7 @@ fun DashboardScreen(
                         color = MaterialTheme.colorScheme.error
                     )
                 }
-                else -> {
-                    // Puedes manejar el estado Idle o algún otro
-                }
+                else -> {}
             }
 
             MovieListsDropdownMenu(
@@ -93,7 +90,7 @@ fun DashboardScreen(
                 expandMenu = expandMenu.value,
                 onDismissMenu = { expandMenu.value = false },
                 onMovieListSelected = { listId ->
-                    viewModel.addMovieToList(listId.toString(), movieID.value)
+                    viewModel.addMovieToList(listId, movieID.value)
                     expandMenu.value = false
                 }
             )

@@ -2,11 +2,12 @@ package com.proyect.movielists.presentation.screens.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.proyect.movielists.domine.models.ListItem
-import com.proyect.movielists.domine.models.Movie
 import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
 import com.proyect.movielists.domine.usecase.MoviesUseCase
+import com.proyect.movielists.presentation.models.ListItemUI
+import com.proyect.movielists.presentation.models.MovieUI
+import com.proyect.movielists.presentation.models.mappers.toUIModel
 import com.proyect.movielists.utils.MovieListType
 import com.proyect.movielists.utils.StatusResult
 import com.proyect.movielists.utils.UIState
@@ -22,11 +23,11 @@ class DashboardViewModel(
     private val addMovieToListUseCase: AddMovieToListUseCase,
 ) : ViewModel() {
 
-    private val _moviesState = MutableStateFlow<UIState<List<Movie>>>(UIState.Idle)
-    val moviesState: StateFlow<UIState<List<Movie>>> = _moviesState
+    private val _moviesState = MutableStateFlow<UIState<List<MovieUI>>>(UIState.Idle)
+    val moviesState: StateFlow<UIState<List<MovieUI>>> = _moviesState
 
-    private val _movieListsState = MutableStateFlow<UIState<List<ListItem>>>(UIState.Idle)
-    val movieListsState: StateFlow<UIState<List<ListItem>>> = _movieListsState
+    private val _movieListsState = MutableStateFlow<UIState<List<ListItemUI>>>(UIState.Idle)
+    val movieListsState: StateFlow<UIState<List<ListItemUI>>> = _movieListsState
 
     private val _successMessage = MutableStateFlow("")
     val successMessage = _successMessage.asStateFlow()
@@ -44,7 +45,7 @@ class DashboardViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = moviesUseCase.execute(movieListType)) {
                 is StatusResult.Success -> {
-                    _moviesState.value = UIState.Success(result.value.results)
+                    _moviesState.value = UIState.Success(result.value.results.map { it.toUIModel() })
                 }
                 is StatusResult.Error -> {
                     _moviesState.value = UIState.Error(result.message)
@@ -58,7 +59,7 @@ class DashboardViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = getMovieListsUseCase.execute()) {
                 is StatusResult.Success -> {
-                    _movieListsState.value = UIState.Success(result.value.results)
+                    _movieListsState.value = UIState.Success(result.value.results.map { it.toUIModel() })
                 }
                 is StatusResult.Error -> {
                     _movieListsState.value = UIState.Error(result.message)

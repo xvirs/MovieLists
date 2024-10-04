@@ -14,11 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.proyect.movielists.domine.models.GetMovieListResponse
+import com.proyect.movielists.presentation.models.MovieListUI
 
 @Composable
 fun ListDetailsContent(
-    listDetails: GetMovieListResponse,
+    listDetails: MovieListUI,
     onRemoveMovie: (String) -> Unit,
 ) {
     Box(

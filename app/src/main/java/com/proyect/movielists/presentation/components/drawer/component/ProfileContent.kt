@@ -19,10 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.proyect.movielists.domine.models.UserProfile
+import com.proyect.movielists.presentation.models.ProfileUI
 
 @Composable
-fun ProfileContent(profile: UserProfile) {
+fun ProfileContent(
+    profile: ProfileUI,
+    navigateToLogin: () -> Unit
+    ) {
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
@@ -34,7 +37,7 @@ fun ProfileContent(profile: UserProfile) {
     ) {
         Spacer(modifier = Modifier.height(16.dp))
         AsyncImage(
-            model = "https://image.tmdb.org/t/p/w500${profile.avatar?.tmdb?.avatarPath}",
+            model = "https://image.tmdb.org/t/p/w500${profile.avatarPath}",
             contentDescription = "Photo profile",
             modifier = Modifier
                 .size(120.dp)
@@ -70,7 +73,7 @@ fun ProfileContent(profile: UserProfile) {
         HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f))
 
         Spacer(modifier = Modifier.weight(1f))
-        LogoutButton()
+        LogoutButton(navigateToLogin)
         Spacer(modifier = Modifier.height(70.dp))
     }
 }

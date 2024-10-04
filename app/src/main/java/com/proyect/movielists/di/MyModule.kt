@@ -38,7 +38,6 @@ import com.proyect.movielists.domine.interfaces.ProfileRepository
 import com.proyect.movielists.domine.usecase.AddFavoriteUseCase
 import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
 import com.proyect.movielists.domine.usecase.CreateMovieListUseCase
-import com.proyect.movielists.domine.usecase.CreateSessionUseCase
 import com.proyect.movielists.domine.usecase.GetFavoriteUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListUseCase
 import com.proyect.movielists.domine.usecase.RemoveMovieFromListUseCase
@@ -48,9 +47,8 @@ import com.proyect.movielists.domine.usecase.GetMovieUseCase
 import com.proyect.movielists.domine.usecase.MoviesUseCase
 import com.proyect.movielists.domine.usecase.ProfileUseCase
 import com.proyect.movielists.domine.usecase.RemoveFavoriteUseCase
-import com.proyect.movielists.domine.usecase.RequestTokenUseCase
 import com.proyect.movielists.domine.usecase.SearchMoviesUseCase
-import com.proyect.movielists.domine.usecase.ValidateLoginUseCase
+import com.proyect.movielists.domine.usecase.LoginUseCase
 import com.proyect.movielists.presentation.components.seachBar.SearchBarViewModel
 import com.proyect.movielists.presentation.screens.Favorites.FavoritesViewModel
 import com.proyect.movielists.presentation.screens.list.ListViewModel
@@ -66,9 +64,7 @@ val useCaseModule = module {
 
     single<AuthDataSource> { AuthDataSourceImpl(get()) }
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
-    factory { CreateSessionUseCase(get()) }
-    factory { RequestTokenUseCase(get()) }
-    factory { ValidateLoginUseCase(get()) }
+    factory { LoginUseCase(get()) }
 
     single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
     single<ProfileRepository> { ProfileRepositoryImpl(get(), get()) }
@@ -101,7 +97,7 @@ val useCaseModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { AuthViewModel(get(),get(),get()) }
+    viewModel { AuthViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { DashboardViewModel(get(), get(), get()) }
     viewModel { FavoritesViewModel() }

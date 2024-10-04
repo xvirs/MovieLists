@@ -1,4 +1,4 @@
-package com.proyect.movielists.data.models.dto
+package com.proyect.movielists.data.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -98,4 +98,3 @@ data class RemoveListResponseDto(
     @SerialName("status_code") val statusCode: Int,
     @SerialName("status_message") val statusMessage: String
 )
-

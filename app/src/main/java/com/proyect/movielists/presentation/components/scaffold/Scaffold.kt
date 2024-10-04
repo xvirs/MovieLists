@@ -33,7 +33,7 @@ fun MainScreen(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerProfile()
+            DrawerProfile(navControllerAppNavigation)
         },
         content = {
             Scaffold(

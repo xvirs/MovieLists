@@ -2,7 +2,7 @@ package com.proyect.movielists.data.repository
 
 import com.proyect.movielists.data.interfaces.ProfileDataSource
 import com.proyect.movielists.data.interfaces.SessionDataStore
-import com.proyect.movielists.data.mappers.toUserProfile
+import com.proyect.movielists.data.models.mappers.toUserProfile
 import com.proyect.movielists.domine.interfaces.ProfileRepository
 import com.proyect.movielists.domine.models.UserProfile
 import com.proyect.movielists.utils.StatusResult

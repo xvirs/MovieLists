@@ -2,8 +2,8 @@ package com.proyect.movielists.data.repository
 
 import com.proyect.movielists.data.interfaces.FavoriteDataSource
 import com.proyect.movielists.data.interfaces.SessionDataStore
-import com.proyect.movielists.data.mappers.toData
-import com.proyect.movielists.data.mappers.toDomain
+import com.proyect.movielists.data.models.mappers.toData
+import com.proyect.movielists.data.models.mappers.toDomain
 import com.proyect.movielists.domine.interfaces.FavoriteRepository
 import com.proyect.movielists.domine.models.FavoriteRequest
 import com.proyect.movielists.domine.models.FavoriteResponse
