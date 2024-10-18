@@ -8,5 +8,6 @@ data class ListItemUI(
     val iso6391: String,
     val listType: String,
     val name: String,
-    val posterPath: String?
+    val posterPath: String?,
+    val posterUrls: List<String>? = emptyList()
 )

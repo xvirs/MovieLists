@@ -1,6 +1,7 @@
 package com.proyect.movielists.presentation.components.scaffold
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
@@ -9,6 +10,11 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,8 +24,9 @@ import com.project.mytemplate.presentation.navegation.Screen
 import com.proyect.movielists.presentation.components.drawer.DrawerProfile
 import com.proyect.movielists.presentation.screens.dashboard.DashboardScreen
 import com.proyect.movielists.presentation.screens.lists.ListsScreen
-import com.proyect.movielists.presentation.screens.Favorites.FavoritesScreen
+import com.proyect.movielists.presentation.screens.explorer.ExplorerScreen
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
@@ -29,8 +36,21 @@ fun MainScreen(
 ) {
     val navControllerMainScreen = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    var searchActive by remember { mutableStateOf(false) }
+    val gesturesEnabled = remember { mutableStateOf(false) }
+
+    if (drawerState.isOpen) {
+        LaunchedEffect(Unit) {
+            gesturesEnabled.value = true
+        }
+    } else {
+        LaunchedEffect(Unit) {
+            gesturesEnabled.value = false
+        }
+    }
 
     ModalNavigationDrawer(
+        gesturesEnabled = gesturesEnabled.value,
         drawerState = drawerState,
         drawerContent = {
             DrawerProfile(navControllerAppNavigation)
@@ -42,11 +62,16 @@ fun MainScreen(
                         navControllerAppNavigation = navControllerAppNavigation,
                         snackBarHostState = snackBarHostState,
                         coroutineScope = coroutineScope,
-                        drawerState = drawerState
+                        drawerState = drawerState,
+                        searchActive = searchActive,
+                        onSearchActiveChange = { searchActive = it }
                     )
                 },
                 bottomBar = {
-                    BottomNavigationBar(navControllerMainScreen)
+                    BottomNavigationBar(
+                        navController = navControllerMainScreen,
+                        onBottomNavItemClick = { searchActive = false }
+                    )
                 },
                 snackbarHost = {
                     SnackbarHost(hostState = snackBarHostState)
@@ -55,7 +80,11 @@ fun MainScreen(
                     NavHost(
                         navController = navControllerMainScreen,
                         startDestination = Screen.Dashboard.route,
-                        Modifier.padding(innerPadding)
+                        Modifier
+                            .padding(innerPadding)
+                            .clickable {
+                                gesturesEnabled.value = false
+                            }
                     ) {
                         composable(Screen.Lists.route) {
                             ListsScreen(
@@ -71,8 +100,9 @@ fun MainScreen(
                                 coroutineScope = coroutineScope,
                             )
                         }
-                        composable(Screen.Screen3.route) {
-                            FavoritesScreen(
+                        composable(Screen.Explorer.route) {
+                            ExplorerScreen(
+                                navControllerAppNavigation = navControllerAppNavigation,
                                 snackBarHostState = snackBarHostState,
                                 coroutineScope = coroutineScope
                             )

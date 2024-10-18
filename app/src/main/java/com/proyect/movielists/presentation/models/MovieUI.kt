@@ -1,11 +1,11 @@
 package com.proyect.movielists.presentation.models
 
 data class MovieListUI(
+    val id: Int,
     val name: String,
     val description: String,
     val movies: List<MovieUI>
 )
-
 
 data class MovieUI(
     val id: Int,
@@ -23,7 +23,8 @@ data class MovieFavUI(
     val overview: String,
     val posterUrl: String?,
     val releaseDate: String,
-    val isFavorite: Boolean
+    val isFavorite: Boolean,
+    val voteAverage: Double
 )
 
 data class MovieDetailsUI(

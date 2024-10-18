@@ -43,7 +43,7 @@ fun ProfileContent(
                 .size(120.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(10.dp)
+                .padding(18.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))

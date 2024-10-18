@@ -1,4 +1,4 @@
-package com.proyect.movielists.presentation.screens.dashboard.component
+package com.proyect.movielists.presentation.screens.explorer.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth

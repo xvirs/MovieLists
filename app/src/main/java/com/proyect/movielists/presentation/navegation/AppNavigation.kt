@@ -17,6 +17,7 @@ fun AppNavigation(){
     val navControllerAppNavigation = rememberNavController()
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+
     NavHost(
         navController = navControllerAppNavigation,
         startDestination = "login"
@@ -29,7 +30,11 @@ fun AppNavigation(){
         }
         composable("movie/{movieId}") { backStackEntry ->
             val movieId = backStackEntry.arguments?.getString("movieId")
-            MovieScreen( movieId = movieId!!) {
+            MovieScreen(
+                snackBarHostState = snackBarHostState,
+                coroutineScope = coroutineScope,
+                movieId = movieId!!
+            ) {
                 navControllerAppNavigation.popBackStack()
             }
         }

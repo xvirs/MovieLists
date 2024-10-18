@@ -23,15 +23,22 @@ import com.proyect.movielists.presentation.components.seachBar.SearchBarScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun TopBar(
     navControllerAppNavigation: NavHostController,
     snackBarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    searchActive: Boolean,
+    onSearchActiveChange: (Boolean) -> Unit
 ) {
     var showIconv by remember { mutableStateOf(true) }
+
+    if (!searchActive) {
+        showIconv = true
+    } else {
+        showIconv = false
+    }
 
     Row(
         modifier = Modifier
@@ -59,9 +66,8 @@ fun TopBar(
         }
         SearchBarScreen(
             navControllerAppNavigation = navControllerAppNavigation,
-            snackBarHostState = snackBarHostState,
-            coroutineScope = coroutineScope,
-            showIcon = { showIconv = !showIconv }
+            searchActive = searchActive,
+            onSearchActiveChange = onSearchActiveChange
         )
     }
 }

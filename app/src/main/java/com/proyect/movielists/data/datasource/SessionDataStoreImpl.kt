@@ -17,7 +17,6 @@ class SessionDataStoreImpl(private val dataStore: DataStore<Preferences>) : Sess
         val ACCOUNT_ID = stringPreferencesKey("account_id")
     }
 
-
     // Session ID
     override val sessionIdFlow: Flow<StatusResult<String?>> = dataStore.data
         .map { preferences ->
@@ -58,7 +57,6 @@ class SessionDataStoreImpl(private val dataStore: DataStore<Preferences>) : Sess
         }
     }
 
-
     // Account ID
     override suspend fun saveAccountId(accountId: String): StatusResult<Unit> {
         return try {
@@ -74,16 +72,16 @@ class SessionDataStoreImpl(private val dataStore: DataStore<Preferences>) : Sess
         }
     }
 
-    override val accountIdFlow: Flow<StatusResult<String?>> = dataStore.data
-        .map { preferences ->
-            StatusResult.Success(preferences[ACCOUNT_ID])
-        }
-        .catch { exception ->
-            StatusResult.Error(
-                exception.message ?: "Error al retornar el Account ID",
-                StatusResult.ErrorType.UNKNOWN
-            )
-        }
+    override val accountIdFlow: Flow<StatusResult<String?>> =  dataStore.data
+    .map { preferences ->
+        StatusResult.Success(preferences[ACCOUNT_ID])
+    }
+    .catch { exception ->
+        StatusResult.Error(
+            exception.message ?: "Error al retornar el Account ID",
+            StatusResult.ErrorType.UNKNOWN
+        )
+    }
 
     override suspend fun clearAccountId(): StatusResult<Unit> {
         return try {

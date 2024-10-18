@@ -33,46 +33,47 @@ fun ListScreen(
         viewModel.getListDetails(listId)
     }
 
-    Scaffold(
-        topBar = {
-            ListTopBar(
-                onBackClick = onBackClick,
-                onRemoveList = { viewModel.removeList(listId.toInt()) }
-            )
-        },
-        content = { padding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .background(MaterialTheme.colorScheme.background)
-            ) {
-                when (listDetailsState) {
-                    is UIState.Loading -> {
-                        Loading()
-                    }
-                    is UIState.Success -> {
+    when (listDetailsState) {
+        is UIState.Loading -> {
+            Loading()
+        }
+        is UIState.Success -> {
 
+            Scaffold(
+                topBar = {
+                    ListTopBar(
+                        title = (listDetailsState as UIState.Success<MovieListUI>).data.name,
+                        onBackClick = onBackClick,
+                        onRemoveList = { viewModel.removeList(listId.toInt()) }
+                    )
+                },
+                content = { padding ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                            .background(MaterialTheme.colorScheme.background)
+                    ) {
                         val listDetails = (listDetailsState as UIState.Success<MovieListUI>).data
                         ListDetailsContent(
                             listDetails = listDetails,
                             onRemoveMovie = { movieId -> viewModel.removeMovieFromList(listId, movieId) }
                         )
                     }
-                    is UIState.Error -> {
-                        val errorMessage = (listDetailsState as UIState.Error).message
-                        Text(
-                            text = errorMessage,
-                            color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(MaterialTheme.colorScheme.background)
-                                .padding(padding)
-                        )
-                    }
-                    UIState.Idle -> {}
                 }
-            }
+            )
+
         }
-    )
+        is UIState.Error -> {
+            val errorMessage = (listDetailsState as UIState.Error).message
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            )
+        }
+        UIState.Idle -> {}
+    }
 }

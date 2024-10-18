@@ -2,5 +2,5 @@
     <string name="app_name">Movie Lists</string>
     <string name="ListsScreen">Lists</string>
     <string name="DashboardScreen">Dashboard</string>
-    <string name="screen3">Screen 3</string>
+    <string name="Explorer">Explorer</string>
 </resources>

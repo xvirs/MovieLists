@@ -31,7 +31,7 @@ fun Movie.toUIModel(): MovieUI {
         posterUrl = this.posterPath?.let { "https://image.tmdb.org/t/p/w500$it" },
         backdropUrl = this.backdropPath?.let { "https://image.tmdb.org/t/p/w500$it" },
         releaseDate = this.releaseDate,
-        voteAverage = this.voteAverage
+        voteAverage = this.voteAverage,
     )
 }
 
@@ -42,10 +42,10 @@ fun MovieFav.toUIModel(): MovieFavUI {
         overview = this.overview,
         posterUrl = this.posterUrl,
         releaseDate = this.releaseDate,
-        isFavorite = true
+        isFavorite = true,
+        voteAverage = this.voteAverage
     )
 }
-
 
 fun ListItem.toUIModel(): ListItemUI {
     return ListItemUI(
@@ -60,9 +60,9 @@ fun ListItem.toUIModel(): ListItemUI {
     )
 }
 
-
 fun GetMovieListResponse.toMovieListUI(): MovieListUI {
     return MovieListUI(
+        id = this.id,
         name = this.name,
         description = this.description,
         movies = this.movies.map { it.toMovieUI() } // Reutilizando MovieUI

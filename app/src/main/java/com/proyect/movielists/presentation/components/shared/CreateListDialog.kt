@@ -1,17 +1,10 @@
-package com.proyect.movielists.presentation.screens.lists.component
+package com.proyect.movielists.presentation.components.shared
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.List
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -35,38 +28,52 @@ fun CreateListDialog(
 
     AlertDialog(
         onDismissRequest = { onDismiss() },
-        title = { Text("Crear nueva lista", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) },
+        title = {
+            Text("Crear nueva lista",
+                style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onSurface)) },
         text = {
             Column {
                 OutlinedTextField(
                     value = listTitle,
                     onValueChange = { listTitle = it },
                     label = { Text("Título de la lista") },
-                    leadingIcon = { Icon(imageVector = Icons.Default.List, contentDescription = "List Title") },
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.fillMaxWidth()
                 )
+
                 OutlinedTextField(
                     value = listDescription,
                     onValueChange = { listDescription = it },
                     label = { Text("Descripción de la lista") },
-                    leadingIcon = { Icon(imageVector = Icons.Default.Description, contentDescription = "List Description") },
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                    maxLines = 3
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    minLines = 5,
+                    maxLines = 5,
+                    shape = RoundedCornerShape(10.dp)
                 )
             }
         },
         confirmButton = {
-            TextButton(onClick = { onCreate(listTitle, listDescription) }) {
-                Icon(imageVector = Icons.Default.Check, contentDescription = "Create List")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Crear")
+            TextButton(
+                onClick = { onCreate(listTitle, listDescription) }
+            ) {
+                Text(
+                    text = "Crear",
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Icon(imageVector = Icons.Default.Close, contentDescription = "Cancel")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Cancelar")
+            TextButton(
+                onClick = onDismiss
+            ) {
+                Text(
+                    text = "Cancelar",
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     )

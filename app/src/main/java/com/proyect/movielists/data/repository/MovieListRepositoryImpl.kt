@@ -102,7 +102,7 @@ class MovieListRepositoryImpl(
 
     private suspend fun getAccountId() : String{
         val accountId = when (sessionDataStore.accountIdFlow.first()){
-            is StatusResult.Success -> ( sessionDataStore.accountIdFlow.first() as StatusResult.Success<String?>).value
+            is StatusResult.Success -> ( sessionDataStore.accountIdFlow.first() as StatusResult.Success<String>).value
             is StatusResult.Error -> { "Error al obtener el ID de la cuenta" }
         }
         return accountId!!

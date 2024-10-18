@@ -36,10 +36,13 @@ class FavoriteRepositoryImpl(
 
     private suspend fun getAccountId() : Int{
         val accountId = when (sessionDataStore.accountIdFlow.first()){
-            is StatusResult.Success -> ( sessionDataStore.accountIdFlow.first() as StatusResult.Success<String?>).value
+            is StatusResult.Success -> ( sessionDataStore.accountIdFlow.first() as StatusResult.Success<String>).value
             is StatusResult.Error -> { "Error al obtener el ID de la cuenta" }
         }
-        return accountId!!.toInt()
+        if (accountId == null) {
+            return 0
+        } else {
+            return accountId.toInt()
+        }
     }
-
 }

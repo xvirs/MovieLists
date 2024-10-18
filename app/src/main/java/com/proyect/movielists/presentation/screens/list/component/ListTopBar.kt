@@ -19,13 +19,14 @@ import androidx.compose.runtime.remember
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListTopBar(
+    title: String,
     onBackClick: () -> Unit,
     onRemoveList: () -> Unit
 ){
 
     val expandMenu = remember { mutableStateOf(false) }
     TopAppBar(
-        title = { Text(text = "Lista de Películas") },
+        title = { Text(text = "title") },
         navigationIcon = {
             IconButton(onClick = { onBackClick() }) {
                 Icon(

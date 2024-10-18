@@ -50,7 +50,7 @@ import com.proyect.movielists.domine.usecase.RemoveFavoriteUseCase
 import com.proyect.movielists.domine.usecase.SearchMoviesUseCase
 import com.proyect.movielists.domine.usecase.LoginUseCase
 import com.proyect.movielists.presentation.components.seachBar.SearchBarViewModel
-import com.proyect.movielists.presentation.screens.Favorites.FavoritesViewModel
+import com.proyect.movielists.presentation.screens.explorer.ExplorerViewModel
 import com.proyect.movielists.presentation.screens.list.ListViewModel
 import com.proyect.movielists.presentation.screens.lists.ListsViewModel
 import com.proyect.movielists.presentation.screens.movie.MovieViewModel
@@ -99,14 +99,13 @@ val useCaseModule = module {
 val viewModelModule = module {
     viewModel { AuthViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
-    viewModel { DashboardViewModel(get(), get(), get()) }
-    viewModel { FavoritesViewModel() }
-    viewModel { ListsViewModel(get(),get(),get(),get(),get(), get()) }
+    viewModel { DashboardViewModel(get()) }
+    viewModel { ExplorerViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { ListsViewModel(get(),get(),get(), get()) }
     viewModel { ListViewModel(get(), get(), get(), get()) }
     viewModel { SearchBarViewModel(get()) }
-    viewModel { MovieViewModel(get(), get(), get(), get()) }
+    viewModel { MovieViewModel(get(), get(), get(), get(), get(), get(), get()) }
 }
-
 
 fun createDataStore(context: Context): DataStore<Preferences> {
     return  PreferenceDataStoreFactory.create(

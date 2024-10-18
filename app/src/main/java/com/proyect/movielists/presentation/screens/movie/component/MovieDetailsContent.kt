@@ -3,6 +3,7 @@ package com.proyect.movielists.presentation.screens.movie.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,28 +34,20 @@ import coil.compose.AsyncImage
 import com.proyect.movielists.presentation.models.MovieDetailsUI
 
 @Composable
-fun MovieDetailsContent(movie: MovieDetailsUI) {
+fun MovieDetailsContent(
+    movie: MovieDetailsUI,
+    paddingValues: PaddingValues,
+) {
     val imageUrl = "https://image.tmdb.org/t/p/w500${movie.backdropUrl}"
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.SpaceBetween, // Distribuye los elementos equitativamente
+            .padding(horizontal = 5.dp)
+            .padding(paddingValues),
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
-        // Título de la película
-        Text(
-            text = movie.title ?: "Unknown title",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier
-                .padding(bottom = 8.dp, )
-        )
-
-        // Imagen de la película
         AsyncImage(
             model = imageUrl,
             contentDescription = "Movie Poster",
@@ -63,22 +56,13 @@ fun MovieDetailsContent(movie: MovieDetailsUI) {
                 .clip(RoundedCornerShape(16.dp))
                 .weight(2f) // Asigna más peso a la imagen
         )
-
-        // Espacio entre componentes
         Spacer(modifier = Modifier.height(16.dp))
-
-        // Descripción de la película (solo esta parte es scrolleable)
         MovieOverview(overview = movie.overview ?: "No description available.", modifier = Modifier.weight(2f))
-
         Spacer(modifier = Modifier.height(16.dp))
-
-        // Estrellas de rating
         RatingStars(voteAverage = movie.voteAverage)
-
         Spacer(modifier = Modifier.height(16.dp))
-
-        // Información extra (fecha de lanzamiento y duración)
         movie.runtime?.let { MovieExtraInfo(releaseDate = movie.releaseDate, runtime = it) }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
@@ -86,11 +70,11 @@ fun MovieDetailsContent(movie: MovieDetailsUI) {
 fun MovieOverview(overview: String, modifier: Modifier) {
     Card(
         modifier = modifier
-            .fillMaxWidth(), // Asigna peso para que ocupe parte de la pantalla
+            .fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(0.dp)
     ) {
-        Box(modifier = Modifier.heightIn(max = 200.dp)) { // Limita la altura máxima de la descripción
+        Box(modifier = Modifier.heightIn(max = 200.dp)) {
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
@@ -105,8 +89,6 @@ fun MovieOverview(overview: String, modifier: Modifier) {
         }
     }
 }
-
-
 
 @Composable
 fun MovieExtraInfo(releaseDate: String, runtime: Int) {
