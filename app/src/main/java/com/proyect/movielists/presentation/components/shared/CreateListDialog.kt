@@ -4,12 +4,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +29,11 @@ fun CreateListDialog(
 ) {
     var listTitle by remember { mutableStateOf("") }
     var listDescription by remember { mutableStateOf("") }
+    var error by remember { mutableStateOf(false) }
+
+    LaunchedEffect(listTitle.isNotEmpty()) {
+        error = false
+    }
 
     AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -38,7 +47,19 @@ fun CreateListDialog(
                     onValueChange = { listTitle = it },
                     label = { Text("Título de la lista") },
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = error,
+                    trailingIcon = {
+                        if (error) {
+                            Icon(
+                                imageVector = Icons.Filled.Error,
+                                tint = MaterialTheme.colorScheme.error,
+                                contentDescription = "Error name List",
+                                modifier = Modifier
+                            )
+                        }
+                    }
+
                 )
 
                 OutlinedTextField(
@@ -56,7 +77,13 @@ fun CreateListDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = { onCreate(listTitle, listDescription) }
+                onClick = {
+                    if(listTitle.isNotEmpty()){
+                        onCreate(listTitle, listDescription)
+                    } else {
+                        error = true
+                    }
+                }
             ) {
                 Text(
                     text = "Crear",

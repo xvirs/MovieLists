@@ -50,14 +50,9 @@ fun MovieLists(
     onItemClick: (Int) -> Unit,
     removeList: (Int, String) -> Unit
 ) {
-    var moviesLists = rememberSaveable { mutableStateOf(moviesLists) }
     val itemDeleted = remember { mutableStateOf(0) }
 
-    LaunchedEffect(moviesLists.value) {
-        moviesLists.value = moviesLists.value
-    }
-
-    if (moviesLists.value.isEmpty()) {
+    if (moviesLists.isEmpty()) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -92,9 +87,9 @@ fun MovieLists(
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
-            items(moviesLists.value.size) { index ->
+            items(moviesLists.size) { index ->
 
-                val listItem = moviesLists.value[index]
+                val listItem = moviesLists[index]
                 val moviePosterInList = listItem.posterUrls ?: emptyList()
 
                 CustomListItem(
@@ -102,8 +97,7 @@ fun MovieLists(
                     posterUrl = moviePosterInList,
                     onItemClick = { onItemClick(listItem.id) },
                     onRemoveList = {
-                       removeList(listItem.id, listItem.name)
-                        moviesLists.value = moviesLists.value.filter { it.id != listItem.id }.toMutableList()
+                        removeList(listItem.id, listItem.name)
                         itemDeleted.value = listItem.id
                     }
                 )

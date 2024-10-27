@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.proyect.movielists.domine.usecase.AddFavoriteUseCase
 import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
+import com.proyect.movielists.domine.usecase.CreateMovieListUseCase
 import com.proyect.movielists.domine.usecase.GetFavoriteUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
 import com.proyect.movielists.domine.usecase.MoviesUseCase
@@ -30,7 +31,8 @@ class ExplorerViewModel(
     private val addMovieToListUseCase: AddMovieToListUseCase,
     private val addFavoriteUseCase: AddFavoriteUseCase,
     private val removeFavoriteUseCase: RemoveFavoriteUseCase,
-    private val getFavoriteUseCase: GetFavoriteUseCase
+    private val getFavoriteUseCase: GetFavoriteUseCase,
+    private val createMovieListUseCase: CreateMovieListUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UIState<String>>(UIState.Loading)
@@ -73,7 +75,6 @@ class ExplorerViewModel(
     private fun fetchAllData() {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = UIState.Loading
-
             try {
                 coroutineScope {
                     val popularMovies = async { fetchPopularMovies() }
@@ -169,6 +170,17 @@ class ExplorerViewModel(
         }
     }
 
+    fun createMovieList(name: String, description: String, language: String, movieId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = createMovieListUseCase.execute(name, description, language)) {
+                is StatusResult.Success -> {
+                    addMovieToList(result.value.listId.toString(), movieId)
+                }
+                is StatusResult.Error -> result.message
+            }
+        }
+    }
+
     fun isFavorite(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val favorite = getFavoriteUseCase.invoke()) {
@@ -211,5 +223,4 @@ class ExplorerViewModel(
             }
         }
     }
-
 }

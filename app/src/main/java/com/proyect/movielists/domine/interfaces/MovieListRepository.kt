@@ -10,8 +10,14 @@ import com.proyect.movielists.domine.models.RemoveMovieFromListResponse
 import com.proyect.movielists.domine.models.RemoveListResponse
 import com.proyect.movielists.domine.models.GetMovieListsResponse
 import com.proyect.movielists.utils.StatusResult
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface MovieListRepository {
+
+    val movieListsFlow: StateFlow<StatusResult<GetMovieListsResponse>?>
+    fun getMovieListsFlow(): Flow<StatusResult<GetMovieListsResponse>>
+
     suspend fun createMovieList(createMovieListRequest : CreateMovieListRequest) : StatusResult<CreateMovieListResponse>
     suspend fun getMovieLists() : StatusResult<GetMovieListsResponse>
     suspend fun getMovieList( listId: String) : StatusResult<GetMovieListResponse>

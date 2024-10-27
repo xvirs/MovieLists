@@ -31,7 +31,7 @@ class ListsViewModel(
 
     private val _moviesLists = MutableStateFlow<List<ListItemUI>>(emptyList())
     val moviesLists = _moviesLists
-        .onStart { getMovieLists() }
+        .onStart { observeMovieLists() }
         .stateIn(
             scope = viewModelScope,
             started = kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000),
@@ -42,23 +42,38 @@ class ListsViewModel(
     val errorMessage = _errorMessage.asStateFlow()
 
     init {
-        _uiState.value = UIState.Loading
+        observeMovieLists()
     }
 
-    fun getMovieLists() {
+    private fun observeMovieLists() {
+        _uiState.value = UIState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = getMovieListsUseCase.execute()) {
-                is StatusResult.Success -> {
-                    val lists = result.value.results.map { listItem ->
-                        val posterUrls = getPosterUrlsForList(listItem.id)
-                        listItem.toUIModel().copy(posterUrls = posterUrls)
+            getMovieListsUseCase.executeFlow()
+                .collect { result ->
+                    when (result) {
+                        is StatusResult.Success -> {
+                            _moviesLists.value = result.value.results.map { listItem ->
+                                val posterUrls = getPosterUrlsForList(listItem.id)
+                                listItem.toUIModel().copy(posterUrls = posterUrls)
+                            }
+                        }
+                        is StatusResult.Error -> _uiState.value = UIState.Error(result.message)
                     }
-                    _moviesLists.value = lists
                     _uiState.value = UIState.Success("")
                 }
-                is StatusResult.Error -> _uiState.value = UIState.Error(result.message)
-            }
         }
+    }
+
+    suspend fun createMovieList(name: String, description: String, language: String) : String {
+        _uiState.value = UIState.Loading
+        val result = withContext(Dispatchers.IO) {
+            createMovieListUseCase.execute(name, description, language)
+        }
+        observeMovieLists()
+        return when (result) {
+            is StatusResult.Success -> " :)   Creaste la Lista $name"
+            is StatusResult.Error -> ":o   No se pudo crear la Lista $name"
+            }
     }
 
     private suspend fun getPosterUrlsForList(listId: Int): List<String> {
@@ -68,29 +83,13 @@ class ListsViewModel(
         }
     }
 
-    fun createMovieList(name: String, description: String, language: String) {
-        _uiState.value = UIState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val result = createMovieListUseCase.execute(name, description, language)) {
-                is StatusResult.Success -> {
-                    getMovieLists()
-                }
-                is StatusResult.Error -> _uiState.value = UIState.Error(result.message)
-            }
-        }
-    }
-
-    suspend fun removeList(listId: Int, listName: String) : String  {
+    suspend fun removeList(listId: Int, listName: String): String {
         val result = withContext(Dispatchers.IO) {
             removeListUseCase.execute(listId)
         }
-        when (result) {
-            is StatusResult.Success -> {
-                return " :(   Eliminaste la lista $listName"
-            }
-            is StatusResult.Error -> {
-                return " :o   No se pudo eliminar la lista $listName"
-            }
+        return when (result) {
+            is StatusResult.Success -> ":(   Eliminaste la lista $listName"
+            is StatusResult.Error -> ":o   No se pudo eliminar la lista $listName"
         }
     }
 }

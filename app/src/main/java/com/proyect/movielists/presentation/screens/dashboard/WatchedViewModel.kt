@@ -14,15 +14,15 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class DashboardViewModel(
+class WatchedViewModel(
     private val getFavoriteUseCase: GetFavoriteUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UIState<String>>(UIState.Idle)
     val uiState = _uiState.asStateFlow()
 
-    private val _favorites = MutableStateFlow<List<MovieFavUI>>(emptyList())
-    val favorites = _favorites
+    private val _watched = MutableStateFlow<List<MovieFavUI>>(emptyList())
+    val watched = _watched
         .onStart { getFavorites() }
         .stateIn(
             scope = viewModelScope,
@@ -30,17 +30,19 @@ class DashboardViewModel(
             initialValue = emptyList()
         )
 
-
     private fun getFavorites() {
         _uiState.value = UIState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = getFavoriteUseCase.invoke()) {
-                is StatusResult.Success -> {
-                    _uiState.value = UIState.Success("")
-                    _favorites.value = UIState.Success(result.value.results.map { it.toUIModel() }).data
+            getFavoriteUseCase.invokeFlow()
+                .collect { result ->
+                    when (result) {
+                        is StatusResult.Success -> {
+                            _watched.value = result.value.results.map { it.toUIModel() }
+                            _uiState.value = UIState.Success("")
+                        }
+                        is StatusResult.Error -> _uiState.value = UIState.Error(result.message)
+                    }
                 }
-                is StatusResult.Error -> _uiState.value = UIState.Error(result.message)
-            }
         }
     }
 }

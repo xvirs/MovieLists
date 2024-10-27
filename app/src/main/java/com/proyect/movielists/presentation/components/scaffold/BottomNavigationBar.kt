@@ -2,8 +2,8 @@ package com.proyect.movielists.presentation.components.scaffold
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PlaylistAddCheckCircle
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -24,8 +24,8 @@ fun BottomNavigationBar(navController: NavController, onBottomNavItemClick: () -
 
     val items = listOf(
         NavigationItem("Lista", Icons.Filled.PlaylistAddCheckCircle, Screen.Lists.route),
-        NavigationItem("Home", Icons.Filled.Home, Screen.Dashboard.route),
-        NavigationItem("Explorar", Icons.Filled.Explore, Screen.Explorer.route)
+        NavigationItem("Explorar", Icons.Filled.Explore, Screen.Explorer.route),
+        NavigationItem("Vistas", Icons.Filled.Visibility, Screen.Watched.route),
     )
 
     NavigationBar {

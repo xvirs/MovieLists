@@ -32,9 +32,9 @@ fun MovieCategorySection(
     expandMenuIndex: MutableState<Int>,
     onAddToList: (Int) -> Unit,
     onShare: (Int) -> Unit,
-    isFavorite: Boolean,
-    addFavorite: (Int) -> Unit,
-    removeFavorite: (Int) -> Unit
+    isWatched: Boolean,
+    addWatched: (Int) -> Unit,
+    removeWatched: (Int) -> Unit
 ) {
 
     Column(
@@ -69,12 +69,11 @@ fun MovieCategorySection(
             xpandMenuIndex = expandMenuIndex,
             onAddToList = { onAddToList(it) },
             onShare = { onShare(it) },
-            isFavorite = isFavorite,
-            addFavorite = { addFavorite(it) },
-            removeFavorite = { removeFavorite(it) }
+            isWatched = isWatched,
+            addWatched = { addWatched(it) },
+            removeWatched = { removeWatched(it) }
         )
         Spacer(modifier = Modifier.width(8.dp))
         HorizontalDivider()
-
     }
 }

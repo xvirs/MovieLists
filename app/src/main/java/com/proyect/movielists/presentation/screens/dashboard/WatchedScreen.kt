@@ -21,13 +21,13 @@ import kotlinx.coroutines.CoroutineScope
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun DashboardScreen(
+fun WatchedScreen(
     navControllerAppNavigation: NavHostController,
     snackBarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
 ) {
-    val viewModel: DashboardViewModel = koinViewModel()
-    val favorites by viewModel.favorites.collectAsState()
+    val viewModel: WatchedViewModel = koinViewModel()
+    val favorites by viewModel.watched.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
     val expandMenu = remember { mutableStateOf(false) }
     val movieID = remember { mutableStateOf(0) }
@@ -52,7 +52,7 @@ fun DashboardScreen(
 
                 ) {
                     FavoriteMoviesCarousel(
-                        favoriteMovies = favorites,
+                        watchedMovies = favorites,
                         onTapMovie = { movieId ->
                             navControllerAppNavigation.navigate("movie/$movieId")
                         },
@@ -67,15 +67,3 @@ fun DashboardScreen(
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,9 +27,9 @@ import com.proyect.movielists.presentation.models.ListItemUI
 @Composable
 fun MovieBottomBar(
     movieId: Int,
-    isFavorite: () -> Boolean,
+    isWatched: () -> Boolean,
     movieList: List<ListItemUI>,
-    onFavoriteClick: () -> Unit,
+    onWatchedClick: () -> Unit,
     onAddToListClick: (Int, Int) -> Unit,
     onCreateNewListClick: (String, String, Int) -> Unit
 ) {
@@ -41,9 +43,9 @@ fun MovieBottomBar(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { onFavoriteClick() }) {
+            IconButton(onClick = { onWatchedClick() }) {
                 Icon(
-                    imageVector = if (isFavorite()) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    imageVector = if (isWatched()) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                     contentDescription = "Mark as Favorite",
                     tint = MaterialTheme.colorScheme.secondary
                 )
@@ -77,6 +79,3 @@ fun MovieBottomBar(
         )
     }
 }
-
-
-

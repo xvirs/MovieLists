@@ -15,11 +15,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Reorder
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -31,7 +30,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -52,12 +50,11 @@ fun MovieList(
     xpandMenuIndex: MutableState<Int>,
     onAddToList: (Int) -> Unit,
     onShare: (Int) -> Unit,
-    isFavorite: Boolean,
-    addFavorite: (Int) -> Unit,
-    removeFavorite: (Int) -> Unit
+    isWatched: Boolean,
+    addWatched: (Int) -> Unit,
+    removeWatched: (Int) -> Unit
 ) {
     val expandMenuIndex = remember { xpandMenuIndex }
-
     LazyRow(
         modifier = Modifier.pointerInput(Unit) {
             detectTapGestures(onPress = {
@@ -84,9 +81,9 @@ fun MovieList(
                     onShare = {
                         onShare(it)
                     },
-                    isFavorite = isFavorite,
-                    addFavorite = { addFavorite(it) },
-                    removeFavorite = { removeFavorite(it) }
+                    isWatched = isWatched,
+                    addWatched = { addWatched(it) },
+                    removeWatched = { removeWatched(it) }
                 )
             }
         }
@@ -102,9 +99,9 @@ fun ItemMoviePoster(
     onDismissMenu: () -> Unit,
     onAddToList: (Int) -> Unit,
     onShare: (Int) -> Unit,
-    isFavorite: Boolean,
-    addFavorite: (Int) -> Unit,
-    removeFavorite: (Int) -> Unit
+    isWatched: Boolean,
+    addWatched: (Int) -> Unit,
+    removeWatched: (Int) -> Unit,
 ) {
 
     Box(
@@ -174,9 +171,9 @@ fun ItemMoviePoster(
                     onAddToList = {
                         onAddToList(movie.id)
                     },
-                    isFavorite = isFavorite,
-                    addFavorite = { addFavorite(movie.id) },
-                    removeFavorite = { removeFavorite(movie.id) },
+                    isWatched = isWatched,
+                    addWatched = { addWatched(movie.id) },
+                    removeWatched = { removeWatched(movie.id) },
                     onShare = {
                         onShare(movie.id)
                     }
@@ -190,9 +187,9 @@ fun ItemMoviePoster(
 fun QuickActionMenu(
     onAddToList: () -> Unit,
     onShare: () -> Unit,
-    isFavorite: Boolean,
-    addFavorite: () -> Unit,
-    removeFavorite: () -> Unit,
+    isWatched: Boolean,
+    addWatched: () -> Unit,
+    removeWatched: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -210,20 +207,20 @@ fun QuickActionMenu(
             )
         }
         IconButton(onClick = {
-            if(isFavorite){
-                removeFavorite()
+            if(isWatched){
+                removeWatched()
             } else {
-                addFavorite()
+                addWatched()
             }
         }) {
             Icon(
                 imageVector =
-                if(isFavorite){
-                    Icons.Default.Favorite
+                if(isWatched){
+                    Icons.Default.Visibility
                 } else {
-                    Icons.Default.FavoriteBorder
+                    Icons.Default.VisibilityOff
                 },
-                contentDescription = "Marcar como favorito",
+                contentDescription = "Marcar como pelicula vista",
                 tint = MaterialTheme.colorScheme.primary
             )
         }

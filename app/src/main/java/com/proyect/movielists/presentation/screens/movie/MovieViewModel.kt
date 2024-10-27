@@ -43,8 +43,8 @@ class MovieViewModel(
     private val _movieDetail = MutableStateFlow<UIState<MovieDetailsUI>>(UIState.Loading)
     val movieDetail = _movieDetail.asStateFlow()
 
-    private val _isFavorite = MutableStateFlow<Boolean>(false)
-    val isFavorite = _isFavorite.asStateFlow()
+    private val _isWatched = MutableStateFlow<Boolean>(false)
+    val isWatched = _isWatched.asStateFlow()
 
     private val _successMessage = MutableStateFlow<String>("")
     val successMessage = _successMessage.asStateFlow()
@@ -66,11 +66,11 @@ class MovieViewModel(
         }
     }
 
-    fun isFavorite(movieId: Int) {
+    fun isWatched(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val favorite = getFavoriteUseCase.invoke()) {
                 is StatusResult.Success -> {
-                    _isFavorite.value = favorite.value.results.any { it.id == movieId }
+                    _isWatched.value = favorite.value.results.any { it.id == movieId }
                 }
                 is StatusResult.Error -> {
                     _errorMessage.value = favorite.message
@@ -118,30 +118,30 @@ class MovieViewModel(
         }
     }
 
-    fun addFavorite(movieId: Int){
-        _isFavorite.value = true
+    fun addWatched(movieId: Int){
+        _isWatched.value = true
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = addFavoriteUseCase.execute(movieId)) {
                 is StatusResult.Success -> {
                     _successMessage.value = "Pelicula agregada exitosamente"
                 }
                 is StatusResult.Error -> {
-                    _isFavorite.value = false
+                    _isWatched.value = false
                     _errorMessage.value = result.message
                 }
             }
         }
     }
 
-    fun removeFavorite(movieId: Int){
-        _isFavorite.value = false
+    fun removeWatched(movieId: Int){
+        _isWatched.value = false
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = removeFavoriteUseCase.execute(movieId)) {
                 is StatusResult.Success -> {
                     _successMessage.value = "Pelicula agregada exitosamente"
                 }
                 is StatusResult.Error -> {
-                    _isFavorite.value = true
+                    _isWatched.value = true
                     _errorMessage.value = result.message
                 }
             }

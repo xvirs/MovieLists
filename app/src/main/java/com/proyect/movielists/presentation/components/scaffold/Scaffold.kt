@@ -22,11 +22,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.project.mytemplate.presentation.navegation.Screen
 import com.proyect.movielists.presentation.components.drawer.DrawerProfile
-import com.proyect.movielists.presentation.screens.dashboard.DashboardScreen
+import com.proyect.movielists.presentation.screens.dashboard.WatchedScreen
 import com.proyect.movielists.presentation.screens.lists.ListsScreen
 import com.proyect.movielists.presentation.screens.explorer.ExplorerScreen
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
@@ -79,7 +78,7 @@ fun MainScreen(
                 content = { innerPadding ->
                     NavHost(
                         navController = navControllerMainScreen,
-                        startDestination = Screen.Dashboard.route,
+                        startDestination = Screen.Explorer.route,
                         Modifier
                             .padding(innerPadding)
                             .clickable {
@@ -93,8 +92,8 @@ fun MainScreen(
                                 coroutineScope = coroutineScope
                             )
                         }
-                        composable(Screen.Dashboard.route) {
-                            DashboardScreen(
+                        composable(Screen.Watched.route) {
+                            WatchedScreen(
                                 navControllerAppNavigation = navControllerAppNavigation,
                                 snackBarHostState = snackBarHostState,
                                 coroutineScope = coroutineScope,

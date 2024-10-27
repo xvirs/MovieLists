@@ -32,12 +32,12 @@ fun MovieScreen(
     val viewModel: MovieViewModel = koinViewModel()
     val movieState by viewModel.movieDetail.collectAsState()
     val movieList by viewModel.moviesLists.collectAsState()
-    val isFavorite by viewModel.isFavorite.collectAsState()
+    val isFavorite by viewModel.isWatched.collectAsState()
     val showCreateListDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(movieId) {
         viewModel.getMovie(movieId)
-        viewModel.isFavorite(movieId.toInt())
+        viewModel.isWatched(movieId.toInt())
     }
 
 
@@ -57,24 +57,24 @@ fun MovieScreen(
                 bottomBar = {
                     MovieBottomBar(
                         movieId = movieId.toInt(),
-                        isFavorite = {
+                        isWatched = {
                             isFavorite
                         },
                         movieList = movieList,
-                        onFavoriteClick = {
+                        onWatchedClick = {
                             if (isFavorite) {
-                                viewModel.removeFavorite(movieId.toInt())
+                                viewModel.removeWatched(movieId.toInt())
                                 coroutineScope.launch {
                                     snackBarHostState.showSnackbar(
-                                        message = "Eliminada de favoritos" ,
+                                        message = "Nunca viste esta pelicula" ,
                                         duration = SnackbarDuration.Short
                                     )
                                 }
                             } else {
-                                viewModel.addFavorite(movieId.toInt())
+                                viewModel.addWatched(movieId.toInt())
                                 coroutineScope.launch {
                                     snackBarHostState.showSnackbar(
-                                        message = "Agregada a favoritos",
+                                        message = "Agregada como Vista! ",
                                         duration = SnackbarDuration.Short
                                     )
                                 }
@@ -82,10 +82,23 @@ fun MovieScreen(
                         },
                         onAddToListClick = {
                                 movieId, listId ->
+                            coroutineScope.launch {
+                                snackBarHostState.showSnackbar(
+                                    message = "Pelicula Guardada! :)",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                             viewModel.addMovieToList(listId.toString(), movieId)
+
                         },
                         onCreateNewListClick = {
                                 title, description, movieId ->
+                            coroutineScope.launch {
+                                snackBarHostState.showSnackbar(
+                                    message = "Pelicula Guardada en nueva lista! :)",
+                                    duration = SnackbarDuration.Short
+                                )
+                            }
                             viewModel.createMovieList(title, description, "es", movieId.toInt())
                             showCreateListDialog.value = false
                         }

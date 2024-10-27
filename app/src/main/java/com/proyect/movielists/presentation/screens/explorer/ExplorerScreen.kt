@@ -14,9 +14,8 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,14 +27,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.proyect.movielists.presentation.components.shared.AddMovieToListDialog
 import com.proyect.movielists.presentation.components.shared.Loading
-import com.proyect.movielists.presentation.models.ListItemUI
 import com.proyect.movielists.presentation.screens.explorer.component.MovieCategorySection
 import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -53,7 +52,7 @@ fun ExplorerScreen(
     val isFavoriteState by viewModel.isFavorite.collectAsState()
     val expandMenu = remember { mutableStateOf(false) }
     val moviesLists by viewModel.moviesLists.collectAsState()
-    val movieID = remember { mutableStateOf(0) }
+    val movieId = remember { mutableStateOf(0) }
 
     val popularExpandMenuIndex = remember { mutableStateOf(-1) }
     val upcomingExpandMenuIndex = remember { mutableStateOf(-1) }
@@ -63,6 +62,8 @@ fun ExplorerScreen(
     fun closeOtherMenus( otherMenus: List<MutableState<Int>>) {
         otherMenus.forEach { it.value = -1 }
     }
+
+    val showDialog = remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -75,14 +76,31 @@ fun ExplorerScreen(
                     Loading()
                 }
                 is UIState.Success -> {
-                    AddMovieToLists(
-                        expandMenu = expandMenu,
-                        movieList = moviesLists,
-                        onAddToListClick = {
-                            viewModel.addMovieToList(it.toString(), movieID.value)
-                            expandMenu.value = false
-                        }
-                    )
+                    if (expandMenu.value) {
+                        AddMovieToListDialog(
+                            movieId = movieId.value,
+                            movieList = moviesLists,
+                            onAddToListClick = { movieId, listId ->
+                                coroutineScope.launch {
+                                    snackBarHostState.showSnackbar(
+                                        message = "Pelicula Guardada! :)",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                                viewModel.addMovieToList(listId.toString(), movieId)
+                            },
+                            onCreateNewListClick = { title, description, movieId ->
+                                coroutineScope.launch {
+                                    snackBarHostState.showSnackbar(
+                                        message = "Pelicula Guardada en nueva lista! :)",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
+                                viewModel.createMovieList(title, description, "es", movieId)
+                            },
+                            onDismiss = { expandMenu.value = false }
+                        )
+                    }
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize(),
@@ -102,7 +120,7 @@ fun ExplorerScreen(
                                     navControllerAppNavigation.navigate("movie/$movieId")
                                 },
                                 onLongPressMovie = {
-                                    movieID.value = it
+                                    movieId.value = it
                                     closeOtherMenus(listOf(upcomingExpandMenuIndex, nowPlayingExpandMenuIndex, topRatedExpandMenuIndex))
                                     viewModel.isFavorite(it)
                                 },
@@ -113,10 +131,25 @@ fun ExplorerScreen(
                                 onShare = {
 
                                 },
-                                isFavorite = isFavoriteState,
-                                addFavorite = { viewModel.addFavorite(it) },
-                                removeFavorite = { viewModel.addFavorite(it) }
-
+                                isWatched = isFavoriteState,
+                                addWatched = {
+                                    viewModel.addFavorite(it)
+                                    coroutineScope.launch {
+                                        snackBarHostState.showSnackbar(
+                                            message = "Pelicula marcada como Vista",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                },
+                                removeWatched = {
+                                    viewModel.addFavorite(it)
+                                    coroutineScope.launch {
+                                        snackBarHostState.showSnackbar(
+                                            message = "Pelicula desmarcada como Vista",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                }
                             )
                         }
 
@@ -130,9 +163,9 @@ fun ExplorerScreen(
                                     navControllerAppNavigation.navigate("movie/$movieId")
                                 },
                                 onLongPressMovie = {
-                                    movieID.value = it
+                                    movieId.value = it
                                     closeOtherMenus(listOf(popularExpandMenuIndex, nowPlayingExpandMenuIndex, topRatedExpandMenuIndex))
-                                    viewModel.isFavorite(movieID.value)
+                                    viewModel.isFavorite(movieId.value)
                                 },
                                 expandMenuIndex = upcomingExpandMenuIndex,
                                 onAddToList = {
@@ -141,10 +174,25 @@ fun ExplorerScreen(
                                 onShare = {
 
                                 },
-                                isFavorite = isFavoriteState,
-                                addFavorite = { viewModel.addFavorite(it) },
-                                removeFavorite = { viewModel.addFavorite(it) }
-
+                                isWatched = isFavoriteState,
+                                addWatched = {
+                                    viewModel.addFavorite(it)
+                                    coroutineScope.launch {
+                                        snackBarHostState.showSnackbar(
+                                            message = "Pelicula marcada como Vista",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                },
+                                removeWatched = {
+                                    viewModel.addFavorite(it)
+                                    coroutineScope.launch {
+                                        snackBarHostState.showSnackbar(
+                                            message = "Pelicula desmarcada como Vista",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                }
                             )
                         }
 
@@ -158,7 +206,7 @@ fun ExplorerScreen(
                                     navControllerAppNavigation.navigate("movie/$movieId")
                                 },
                                 onLongPressMovie = {
-                                    movieID.value = it
+                                    movieId.value = it
                                     closeOtherMenus(listOf(popularExpandMenuIndex, upcomingExpandMenuIndex, topRatedExpandMenuIndex))
                                     viewModel.isFavorite(it)
                                 },
@@ -169,10 +217,25 @@ fun ExplorerScreen(
                                 onShare = {
 
                                 },
-                                isFavorite = isFavoriteState,
-                                addFavorite = { viewModel.addFavorite(it) },
-                                removeFavorite = { viewModel.addFavorite(it) }
-
+                                isWatched = isFavoriteState,
+                                addWatched = {
+                                    viewModel.addFavorite(it)
+                                    coroutineScope.launch {
+                                        snackBarHostState.showSnackbar(
+                                            message = "Pelicula marcada como Vista",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                },
+                                removeWatched = {
+                                    viewModel.addFavorite(it)
+                                    coroutineScope.launch {
+                                        snackBarHostState.showSnackbar(
+                                            message = "Pelicula desmarcada como Vista",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                }
                             )
                         }
 
@@ -186,7 +249,7 @@ fun ExplorerScreen(
                                     navControllerAppNavigation.navigate("movie/$movieId")
                                 },
                                 onLongPressMovie = {
-                                    movieID.value = it
+                                    movieId.value = it
                                     closeOtherMenus(listOf(popularExpandMenuIndex, upcomingExpandMenuIndex, nowPlayingExpandMenuIndex))
                                     viewModel.isFavorite(it)
                                 },
@@ -197,10 +260,25 @@ fun ExplorerScreen(
                                 onShare = {
 
                                 },
-                                isFavorite = isFavoriteState,
-                                addFavorite = { viewModel.addFavorite(it) },
-                                removeFavorite = { viewModel.addFavorite(it) }
-
+                                isWatched = isFavoriteState,
+                                addWatched = {
+                                    viewModel.addFavorite(it)
+                                    coroutineScope.launch {
+                                        snackBarHostState.showSnackbar(
+                                            message = "Pelicula marcada como Vista",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                },
+                                removeWatched = {
+                                    viewModel.addFavorite(it)
+                                    coroutineScope.launch {
+                                        snackBarHostState.showSnackbar(
+                                            message = "Pelicula desmarcada como Vista",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                }
                             )
                         }
                     }
@@ -216,37 +294,6 @@ fun ExplorerScreen(
                 else -> {
                 }
             }
-        }
-
-    }
-}
-
-
-@Composable
-fun AddMovieToLists(
-    expandMenu: MutableState<Boolean>,
-    movieList: List<ListItemUI>,
-    onAddToListClick: (Int) -> Unit
-) {
-    DropdownMenu(
-        expanded = expandMenu.value,
-        onDismissRequest = { expandMenu.value = false }
-    ) {
-        movieList.forEach { list ->
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        text = list.name,
-                        maxLines = 1,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                onClick = {
-                    onAddToListClick(list.id)
-                    expandMenu.value = false
-                }
-            )
         }
     }
 }

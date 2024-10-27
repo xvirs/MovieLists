@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.proyect.movielists.presentation.screens.login.AuthViewModel
 import com.proyect.movielists.presentation.components.drawer.ProfileViewModel
-import com.proyect.movielists.presentation.screens.dashboard.DashboardViewModel
+import com.proyect.movielists.presentation.screens.dashboard.WatchedViewModel
 import com.proyect.movielists.data.datasource.AuthDataSourceImpl
 import com.proyect.movielists.data.datasource.FavoriteDataSourceImpl
 import com.proyect.movielists.data.datasource.MovieDataSourceImpl
@@ -99,8 +99,8 @@ val useCaseModule = module {
 val viewModelModule = module {
     viewModel { AuthViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
-    viewModel { DashboardViewModel(get()) }
-    viewModel { ExplorerViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { WatchedViewModel(get()) }
+    viewModel { ExplorerViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { ListsViewModel(get(),get(),get(), get()) }
     viewModel { ListViewModel(get(), get(), get(), get()) }
     viewModel { SearchBarViewModel(get()) }
