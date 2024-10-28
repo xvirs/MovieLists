@@ -1,6 +1,8 @@
 package com.proyect.movielists.presentation.screens.explorer
 
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,10 +29,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.proyect.movielists.presentation.components.shared.AddMovieToListDialog
 import com.proyect.movielists.presentation.components.shared.Loading
+import com.proyect.movielists.presentation.models.MovieDetailsUI
 import com.proyect.movielists.presentation.screens.explorer.component.MovieCategorySection
 import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.CoroutineScope
@@ -53,6 +57,7 @@ fun ExplorerScreen(
     val expandMenu = remember { mutableStateOf(false) }
     val moviesLists by viewModel.moviesLists.collectAsState()
     val movieId = remember { mutableStateOf(0) }
+    val context = LocalContext.current
 
     val popularExpandMenuIndex = remember { mutableStateOf(-1) }
     val upcomingExpandMenuIndex = remember { mutableStateOf(-1) }
@@ -112,7 +117,7 @@ fun ExplorerScreen(
                         }
                         item {
                             MovieCategorySection(
-                                title = "Popular Movies",
+                                title = "Populares",
                                 icon = Icons.Default.Star,
                                 iconColor = Color.Magenta,
                                 movies = popularMoviesState,
@@ -129,7 +134,10 @@ fun ExplorerScreen(
                                     expandMenu.value = true
                                 },
                                 onShare = {
-
+                                    coroutineScope.launch {
+                                        viewModel.getMovie(it.toString())
+                                            ?.let { it1 -> context.shareMovie(it1) }
+                                    }
                                 },
                                 isWatched = isFavoriteState,
                                 addWatched = {
@@ -142,7 +150,7 @@ fun ExplorerScreen(
                                     }
                                 },
                                 removeWatched = {
-                                    viewModel.addFavorite(it)
+                                    viewModel.removeFavorite(it)
                                     coroutineScope.launch {
                                         snackBarHostState.showSnackbar(
                                             message = "Pelicula desmarcada como Vista",
@@ -155,7 +163,7 @@ fun ExplorerScreen(
 
                         item {
                             MovieCategorySection(
-                                title = "Upcoming Movies",
+                                title = "Proximas",
                                 icon = Icons.Default.DateRange,
                                 iconColor = Color.Green,
                                 movies = upcomingMoviesState,
@@ -172,7 +180,10 @@ fun ExplorerScreen(
                                     expandMenu.value = true
                                 },
                                 onShare = {
-
+                                    coroutineScope.launch {
+                                        viewModel.getMovie(it.toString())
+                                            ?.let { it1 -> context.shareMovie(it1) }
+                                    }
                                 },
                                 isWatched = isFavoriteState,
                                 addWatched = {
@@ -185,7 +196,7 @@ fun ExplorerScreen(
                                     }
                                 },
                                 removeWatched = {
-                                    viewModel.addFavorite(it)
+                                    viewModel.removeFavorite(it)
                                     coroutineScope.launch {
                                         snackBarHostState.showSnackbar(
                                             message = "Pelicula desmarcada como Vista",
@@ -198,7 +209,7 @@ fun ExplorerScreen(
 
                         item {
                             MovieCategorySection(
-                                title = "Now Playing Movies",
+                                title = "Estrenos",
                                 icon = Icons.Default.Movie,
                                 iconColor = Color.Red,
                                 movies = nowPlayingMoviesState,
@@ -215,7 +226,10 @@ fun ExplorerScreen(
                                     expandMenu.value = true
                                 },
                                 onShare = {
-
+                                    coroutineScope.launch {
+                                        viewModel.getMovie(it.toString())
+                                            ?.let { it1 -> context.shareMovie(it1) }
+                                    }
                                 },
                                 isWatched = isFavoriteState,
                                 addWatched = {
@@ -228,7 +242,7 @@ fun ExplorerScreen(
                                     }
                                 },
                                 removeWatched = {
-                                    viewModel.addFavorite(it)
+                                    viewModel.removeFavorite(it)
                                     coroutineScope.launch {
                                         snackBarHostState.showSnackbar(
                                             message = "Pelicula desmarcada como Vista",
@@ -241,7 +255,7 @@ fun ExplorerScreen(
 
                         item {
                             MovieCategorySection(
-                                title = "Top Rated Movies",
+                                title = "Mas Valoradas",
                                 icon = Icons.Default.ThumbUp,
                                 iconColor = Color.Blue,
                                 movies = topRatedMoviesState,
@@ -258,7 +272,10 @@ fun ExplorerScreen(
                                     expandMenu.value = true
                                 },
                                 onShare = {
-
+                                    coroutineScope.launch {
+                                        viewModel.getMovie(it.toString())
+                                            ?.let { it1 -> context.shareMovie(it1) }
+                                    }
                                 },
                                 isWatched = isFavoriteState,
                                 addWatched = {
@@ -271,7 +288,7 @@ fun ExplorerScreen(
                                     }
                                 },
                                 removeWatched = {
-                                    viewModel.addFavorite(it)
+                                    viewModel.removeFavorite(it)
                                     coroutineScope.launch {
                                         snackBarHostState.showSnackbar(
                                             message = "Pelicula desmarcada como Vista",
@@ -296,4 +313,27 @@ fun ExplorerScreen(
             }
         }
     }
+}
+
+fun Context.shareMovie(movie: MovieDetailsUI) {
+    val shareText = """
+        🎬 *${movie.title}*
+        
+        📅 Fecha de estreno: ${movie.releaseDate}
+        
+        📝 Descripción: ${movie.overview}
+        
+        🌐 Más información: ${movie.homepage ?: "https://www.imdb.com/title/${movie.imdbID}"}
+        
+        ⭐️ Valoración: ${movie.voteAverage} / 10
+        
+        ¡Échale un vistazo! 🍿
+    """.trimIndent()
+
+    val shareIntent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, shareText)
+        type = "text/plain"
+    }
+    startActivity(Intent.createChooser(shareIntent, "Compartir película"))
 }

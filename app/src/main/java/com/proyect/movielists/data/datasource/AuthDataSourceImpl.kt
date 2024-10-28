@@ -1,6 +1,8 @@
 package com.proyect.movielists.data.datasource
 
 import com.proyect.movielists.data.interfaces.AuthDataSource
+import com.proyect.movielists.data.models.DeleteSessionTokenRequestDto
+import com.proyect.movielists.data.models.DeleteSessionTokenResponseDto
 import com.proyect.movielists.data.models.LoginRequestDto
 import com.proyect.movielists.data.models.LoginResponseDto
 import com.proyect.movielists.data.models.SessionTokenRequestDto
@@ -57,4 +59,20 @@ class AuthDataSourceImpl(private val baseClient: BaseClient) : AuthDataSource {
             StatusResult.Error(response.errorMessage)
         }
     }
+
+    override suspend fun deleteSession(sessionId: DeleteSessionTokenRequestDto): StatusResult<DeleteSessionTokenResponseDto> {
+        val endpoint = "/authentication/session"
+        val errorMessage = "Error al eliminar la sesión"
+        val response = baseClient.delete(
+            url = endpoint,
+            body = Json.encodeToString(sessionId),
+            errorMessage = errorMessage
+        )
+        return if (response.httpResponse != null) {
+            StatusResult.Success(response.httpResponse.body<DeleteSessionTokenResponseDto>())
+        } else {
+            StatusResult.Error(response.errorMessage)
+        }
+    }
+
 }

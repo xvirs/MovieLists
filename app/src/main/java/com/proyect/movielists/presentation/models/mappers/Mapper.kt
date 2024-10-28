@@ -93,6 +93,8 @@ fun MovieDetails.toUIModel(): MovieDetailsUI {
         runtime = this.runtime,
         genres = this.genres.map { it.name },  // Mapeando los géneros a una lista de nombres
         tagline = this.tagline,
-        status = this.status
+        status = this.status,
+        homepage = this.homepage,
+        imdbID = this.imdbId
     )
 }

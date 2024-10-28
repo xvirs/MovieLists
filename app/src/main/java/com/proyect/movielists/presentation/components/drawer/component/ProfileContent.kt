@@ -17,15 +17,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.proyect.movielists.presentation.models.ProfileUI
 
+
 @Composable
 fun ProfileContent(
     profile: ProfileUI,
-    navigateToLogin: () -> Unit
-    ) {
+    closeSession: () -> Unit
+) {
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
@@ -43,7 +45,8 @@ fun ProfileContent(
                 .size(120.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primary)
-                .padding(18.dp)
+                .padding(0.dp),
+            contentScale = ContentScale.Crop
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -73,7 +76,7 @@ fun ProfileContent(
         HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f))
 
         Spacer(modifier = Modifier.weight(1f))
-        LogoutButton(navigateToLogin)
+        LogoutButton(closeSession)
         Spacer(modifier = Modifier.height(70.dp))
     }
 }

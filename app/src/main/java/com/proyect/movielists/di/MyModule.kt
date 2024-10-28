@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.proyect.movielists.presentation.screens.login.AuthViewModel
 import com.proyect.movielists.presentation.components.drawer.ProfileViewModel
-import com.proyect.movielists.presentation.screens.dashboard.WatchedViewModel
+import com.proyect.movielists.presentation.screens.watched.WatchedViewModel
 import com.proyect.movielists.data.datasource.AuthDataSourceImpl
 import com.proyect.movielists.data.datasource.FavoriteDataSourceImpl
 import com.proyect.movielists.data.datasource.MovieDataSourceImpl
@@ -38,6 +38,7 @@ import com.proyect.movielists.domine.interfaces.ProfileRepository
 import com.proyect.movielists.domine.usecase.AddFavoriteUseCase
 import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
 import com.proyect.movielists.domine.usecase.CreateMovieListUseCase
+import com.proyect.movielists.domine.usecase.DeleteSessionUseCase
 import com.proyect.movielists.domine.usecase.GetFavoriteUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListUseCase
 import com.proyect.movielists.domine.usecase.RemoveMovieFromListUseCase
@@ -65,6 +66,7 @@ val useCaseModule = module {
     single<AuthDataSource> { AuthDataSourceImpl(get()) }
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
     factory { LoginUseCase(get()) }
+    factory { DeleteSessionUseCase(get()) }
 
     single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
     single<ProfileRepository> { ProfileRepositoryImpl(get(), get()) }
@@ -98,9 +100,9 @@ val useCaseModule = module {
 
 val viewModelModule = module {
     viewModel { AuthViewModel(get()) }
-    viewModel { ProfileViewModel(get()) }
+    viewModel { ProfileViewModel(get(), get()) }
     viewModel { WatchedViewModel(get()) }
-    viewModel { ExplorerViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { ExplorerViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { ListsViewModel(get(),get(),get(), get()) }
     viewModel { ListViewModel(get(), get(), get(), get()) }
     viewModel { SearchBarViewModel(get()) }

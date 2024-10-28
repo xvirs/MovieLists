@@ -7,9 +7,11 @@ import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
 import com.proyect.movielists.domine.usecase.CreateMovieListUseCase
 import com.proyect.movielists.domine.usecase.GetFavoriteUseCase
 import com.proyect.movielists.domine.usecase.GetMovieListsUseCase
+import com.proyect.movielists.domine.usecase.GetMovieUseCase
 import com.proyect.movielists.domine.usecase.MoviesUseCase
 import com.proyect.movielists.domine.usecase.RemoveFavoriteUseCase
 import com.proyect.movielists.presentation.models.ListItemUI
+import com.proyect.movielists.presentation.models.MovieDetailsUI
 import com.proyect.movielists.presentation.models.MovieUI
 import com.proyect.movielists.presentation.models.mappers.toUIModel
 import com.proyect.movielists.utils.MovieListType
@@ -33,6 +35,7 @@ class ExplorerViewModel(
     private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     private val getFavoriteUseCase: GetFavoriteUseCase,
     private val createMovieListUseCase: CreateMovieListUseCase,
+    private val getMovieUseCase: GetMovieUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UIState<String>>(UIState.Loading)
@@ -52,6 +55,9 @@ class ExplorerViewModel(
 
     private val _isFavorite = MutableStateFlow<Boolean>(false)
     val isFavorite = _isFavorite.asStateFlow()
+
+    private val _movieDetail = MutableStateFlow<UIState<MovieDetailsUI>>(UIState.Loading)
+    val movieDetail = _movieDetail.asStateFlow()
 
     private val _movieLists = MutableStateFlow<List<ListItemUI>>(emptyList())
     val moviesLists = _movieLists
@@ -220,6 +226,17 @@ class ExplorerViewModel(
                     _isFavorite.value = true
                     _errorMessage.value = result.message
                 }
+            }
+        }
+    }
+
+    suspend fun getMovie(movieID: String): MovieDetailsUI? {
+        return when (val response = getMovieUseCase.invoke(movieID)) {
+            is StatusResult.Error -> {
+                null
+            }
+            is StatusResult.Success -> {
+                response.value.toUIModel()
             }
         }
     }

@@ -13,6 +13,7 @@ class MoviesDataSourceImpl(private val baseClient: BaseClient) : MoviesDataSourc
         val errorMessage = "Error al obtener la lista de peliculas ${movieListType.endpoint}"
         val response = baseClient.get(
             url = endpoint,
+            language = "es-ES",
             errorMessage = errorMessage,
         )
         return if (response.httpResponse != null) {

@@ -1,4 +1,4 @@
-package com.proyect.movielists.presentation.screens.dashboard.component
+package com.proyect.movielists.presentation.screens.watched.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,7 +45,7 @@ import coil.compose.AsyncImage
 import com.proyect.movielists.presentation.models.MovieFavUI
 
 @Composable
-fun FavoriteMoviesCarousel(
+fun WatchedMoviesCarousel(
     watchedMovies: List<MovieFavUI> = emptyList(),
     onTapMovie: (Int) -> Unit,
     onLongPressMovie: (Int) -> Unit
@@ -56,7 +56,7 @@ fun FavoriteMoviesCarousel(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
             .fillMaxWidth()
-            .padding(top = 8.dp)
+            .padding(top = 24.dp)
     ) {
         if (watchedMovies.isNotEmpty()){
             Row {
@@ -69,7 +69,7 @@ fun FavoriteMoviesCarousel(
                 )
                 Text(
                     text = "Peliculas Vistas",
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.titleLarge.copy(),
                     modifier = Modifier.padding(8.dp)
                 )
             }
@@ -155,7 +155,7 @@ fun MovieCarouselItem(
             modifier = Modifier
                 .fillMaxSize(),
             horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically // Alinear verticalmente al centro
+            verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
                 model = "https://image.tmdb.org/t/p/w500${movie.posterUrl}",

@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -31,7 +29,8 @@ fun MovieBottomBar(
     movieList: List<ListItemUI>,
     onWatchedClick: () -> Unit,
     onAddToListClick: (Int, Int) -> Unit,
-    onCreateNewListClick: (String, String, Int) -> Unit
+    onCreateNewListClick: (String, String, Int) -> Unit,
+    onShareClick: () -> Unit
 ) {
     val showDialog = remember { mutableStateOf(false) }
 
@@ -45,7 +44,7 @@ fun MovieBottomBar(
         ) {
             IconButton(onClick = { onWatchedClick() }) {
                 Icon(
-                    imageVector = if (isWatched()) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                    imageVector = if (isWatched()) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                     contentDescription = "Mark as Favorite",
                     tint = MaterialTheme.colorScheme.secondary
                 )
@@ -59,7 +58,9 @@ fun MovieBottomBar(
                 )
             }
 
-            IconButton(onClick = { }) {
+            IconButton(onClick = {
+                onShareClick()
+            }) {
                 Icon(
                     imageVector = Icons.Default.Share,
                     contentDescription = "Share with friends",

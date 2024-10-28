@@ -62,6 +62,7 @@ class BaseClient {
         url: String,
         body: String? = null,
         valueParams: Map<String, String>? = null,
+        language: String? = null,
         errorMessage: String,
     ): HttpStatus {
         return try {
@@ -71,10 +72,16 @@ class BaseClient {
                     setBody(body)
                 }
                 header("Authorization", "Bearer $BEARER_TOKEN")
-                valueParams?.let {
-                    parameter(it.keys.first(), it.values.first())
+
+                valueParams?.forEach { (key, value) ->
+                    parameter(key, value)
+                }
+
+                language?.let {
+                    parameter("language", it)
                 }
             }
+
             if (response.status.value in 200..299) {
                 HttpStatus(httpResponse = response)
             } else {
@@ -88,11 +95,15 @@ class BaseClient {
     internal suspend fun delete(
         url: String,
         sessionId: String? = null,
+        body: String? = null,
         errorMessage: String
     ): HttpStatus {
         return try {
             val response = apiClient.delete(BASE_URL + url) {
                 contentType(ContentType.Application.Json)
+                body?.let {
+                    setBody(body)
+                }
                 header("Authorization", "Bearer $BEARER_TOKEN")
                 sessionId?.let {
                     parameter("session_id", it)

@@ -21,6 +21,9 @@ import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import android.content.Context
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun MovieScreen(
@@ -34,6 +37,7 @@ fun MovieScreen(
     val movieList by viewModel.moviesLists.collectAsState()
     val isFavorite by viewModel.isWatched.collectAsState()
     val showCreateListDialog = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     LaunchedEffect(movieId) {
         viewModel.getMovie(movieId)
@@ -101,6 +105,9 @@ fun MovieScreen(
                             }
                             viewModel.createMovieList(title, description, "es", movieId.toInt())
                             showCreateListDialog.value = false
+                        },
+                        onShareClick = {
+                            context.shareMovie(movie)
                         }
                     )
                 },
@@ -118,4 +125,28 @@ fun MovieScreen(
         }
         UIState.Idle -> TODO()
     }
+}
+
+
+fun Context.shareMovie(movie: MovieDetailsUI) {
+    val shareText = """
+        🎬 *${movie.title}*
+        
+        📅 Fecha de estreno: ${movie.releaseDate}
+        
+        📝 Descripción: ${movie.overview}
+        
+        🌐 Más información: ${movie.homepage ?: "https://www.imdb.com/title/${movie.imdbID}"}
+        
+        ⭐️ Valoración: ${movie.voteAverage} / 10
+        
+        ¡Échale un vistazo! 🍿
+    """.trimIndent()
+
+    val shareIntent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, shareText)
+        type = "text/plain"
+    }
+    startActivity(Intent.createChooser(shareIntent, "Compartir película"))
 }

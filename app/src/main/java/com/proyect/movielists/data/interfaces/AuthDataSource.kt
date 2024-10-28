@@ -1,5 +1,7 @@
 package com.proyect.movielists.data.interfaces
 
+import com.proyect.movielists.data.models.DeleteSessionTokenRequestDto
+import com.proyect.movielists.data.models.DeleteSessionTokenResponseDto
 import com.proyect.movielists.data.models.LoginRequestDto
 import com.proyect.movielists.data.models.LoginResponseDto
 import com.proyect.movielists.data.models.SessionTokenRequestDto
@@ -10,4 +12,5 @@ interface AuthDataSource {
     suspend fun requestToken(): StatusResult<LoginResponseDto>
     suspend fun validateLogin(loginRequestDto : LoginRequestDto): StatusResult<LoginResponseDto>
     suspend fun createSession(sessionTokenRequestDto: SessionTokenRequestDto): StatusResult<SessionTokenResponseDto>
+    suspend fun deleteSession(sessionId: DeleteSessionTokenRequestDto): StatusResult<DeleteSessionTokenResponseDto>
 }

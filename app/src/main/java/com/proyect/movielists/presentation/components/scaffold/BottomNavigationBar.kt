@@ -23,7 +23,7 @@ fun BottomNavigationBar(navController: NavController, onBottomNavItemClick: () -
     var selectedItem by rememberSaveable { mutableIntStateOf(1) }
 
     val items = listOf(
-        NavigationItem("Lista", Icons.Filled.PlaylistAddCheckCircle, Screen.Lists.route),
+        NavigationItem("Listas", Icons.Filled.PlaylistAddCheckCircle, Screen.Lists.route),
         NavigationItem("Explorar", Icons.Filled.Explore, Screen.Explorer.route),
         NavigationItem("Vistas", Icons.Filled.Visibility, Screen.Watched.route),
     )

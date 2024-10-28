@@ -22,7 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.project.mytemplate.presentation.navegation.Screen
 import com.proyect.movielists.presentation.components.drawer.DrawerProfile
-import com.proyect.movielists.presentation.screens.dashboard.WatchedScreen
+import com.proyect.movielists.presentation.screens.watched.WatchedScreen
 import com.proyect.movielists.presentation.screens.lists.ListsScreen
 import com.proyect.movielists.presentation.screens.explorer.ExplorerScreen
 import kotlinx.coroutines.CoroutineScope
@@ -52,7 +52,11 @@ fun MainScreen(
         gesturesEnabled = gesturesEnabled.value,
         drawerState = drawerState,
         drawerContent = {
-            DrawerProfile(navControllerAppNavigation)
+            DrawerProfile(
+                navControllerAppNavigation = navControllerAppNavigation,
+                snackBarHostState = snackBarHostState,
+                coroutineScope = coroutineScope
+            )
         },
         content = {
             Scaffold(

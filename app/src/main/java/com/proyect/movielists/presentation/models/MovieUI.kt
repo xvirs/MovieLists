@@ -38,5 +38,7 @@ data class MovieDetailsUI(
     val runtime: Int?,
     val genres: List<String>,
     val tagline: String?,
-    val status: String
+    val status: String,
+    val homepage: String?,
+    val imdbID: String?,
 )

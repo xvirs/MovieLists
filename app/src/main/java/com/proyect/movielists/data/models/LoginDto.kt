@@ -28,3 +28,13 @@ data class LoginRequestDto(
 data class SessionTokenRequestDto(
     @SerialName("request_token") val requestToken: String
 )
+
+@Serializable
+data class DeleteSessionTokenRequestDto(
+    @SerialName("session_id") val requestToken: String
+)
+
+@Serializable
+data class DeleteSessionTokenResponseDto (
+    val success: Boolean? = null,
+)

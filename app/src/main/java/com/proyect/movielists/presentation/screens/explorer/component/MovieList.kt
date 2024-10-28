@@ -216,9 +216,9 @@ fun QuickActionMenu(
             Icon(
                 imageVector =
                 if(isWatched){
-                    Icons.Default.Visibility
-                } else {
                     Icons.Default.VisibilityOff
+                } else {
+                    Icons.Default.Visibility
                 },
                 contentDescription = "Marcar como pelicula vista",
                 tint = MaterialTheme.colorScheme.primary

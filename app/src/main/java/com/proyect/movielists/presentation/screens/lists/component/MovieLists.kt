@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -29,10 +30,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -84,25 +83,48 @@ fun MovieLists(
             }
         }
     } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(moviesLists.size) { index ->
+        Column {
 
-                val listItem = moviesLists[index]
-                val moviePosterInList = listItem.posterUrls ?: emptyList()
+            if (moviesLists.isNotEmpty()){
+                Spacer(modifier = Modifier.height(24.dp))
 
-                CustomListItem(
-                    listItem = listItem,
-                    posterUrl = moviePosterInList,
-                    onItemClick = { onItemClick(listItem.id) },
-                    onRemoveList = {
-                        removeList(listItem.id, listItem.name)
-                        itemDeleted.value = listItem.id
-                    }
-                )
+                Row {
+                    Icon(
+                        imageVector = Icons.Filled.ViewList,
+                        tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = "Watched Movies",
+                        modifier = Modifier
+                            .padding(8.dp)
+                    )
+                    Text(
+                        text = "Listas Creadas",
+                        style = MaterialTheme.typography.titleLarge.copy(),
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
-            item { Spacer(modifier = Modifier.height(80.dp)) }
+
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(moviesLists.size) { index ->
+
+                    val listItem = moviesLists[index]
+                    val moviePosterInList = listItem.posterUrls ?: emptyList()
+
+                    CustomListItem(
+                        listItem = listItem,
+                        posterUrl = moviePosterInList,
+                        onItemClick = { onItemClick(listItem.id) },
+                        onRemoveList = {
+                            removeList(listItem.id, listItem.name)
+                            itemDeleted.value = listItem.id
+                        }
+                    )
+                }
+                item { Spacer(modifier = Modifier.height(80.dp)) }
+            }
         }
     }
 }

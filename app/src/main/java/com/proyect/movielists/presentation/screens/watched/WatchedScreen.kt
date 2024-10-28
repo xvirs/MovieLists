@@ -1,4 +1,4 @@
-package com.proyect.movielists.presentation.screens.dashboard
+package com.proyect.movielists.presentation.screens.watched
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.proyect.movielists.presentation.components.shared.Loading
-import com.proyect.movielists.presentation.screens.dashboard.component.FavoriteMoviesCarousel
+import com.proyect.movielists.presentation.screens.watched.component.WatchedMoviesCarousel
 import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.CoroutineScope
 import org.koin.androidx.compose.koinViewModel
@@ -51,7 +51,7 @@ fun WatchedScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
 
                 ) {
-                    FavoriteMoviesCarousel(
+                    WatchedMoviesCarousel(
                         watchedMovies = favorites,
                         onTapMovie = { movieId ->
                             navControllerAppNavigation.navigate("movie/$movieId")
