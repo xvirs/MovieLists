@@ -19,12 +19,16 @@ class AuthViewModel(
 
     fun login(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            if (email.isBlank() || password.isBlank()) {
+                _uiState.value = UIState.Error("Por favor, complete todos los campos.")
+                return@launch
+            }
+
             _uiState.value = UIState.Loading
             when (val result = loginUseCase.invoke(email, password)) {
-                is StatusResult.Success -> _uiState.value = UIState.Success("Se inicio sesion correctamente")
-                is StatusResult.Error -> throw Exception(result.message)
+                is StatusResult.Success -> _uiState.value = UIState.Success("Se inició sesión correctamente")
+                is StatusResult.Error -> _uiState.value = UIState.Error(result.message)
             }
         }
     }
 }
-
