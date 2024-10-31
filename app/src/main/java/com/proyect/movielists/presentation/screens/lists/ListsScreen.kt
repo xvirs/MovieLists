@@ -1,15 +1,12 @@
 package com.proyect.movielists.presentation.screens.lists
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -24,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.proyect.movielists.presentation.components.shared.CreateListDialog
+import com.proyect.movielists.presentation.components.shared.Loading
 import com.proyect.movielists.presentation.screens.lists.component.MovieLists
 import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.CoroutineScope
@@ -45,16 +43,7 @@ fun ListsScreen(
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         when (uiState)  {
             is UIState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.7f)),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.secondary,
-                    )
-                }
+                Loading()
             }
             is UIState.Error -> {
                 Text(text = (uiState as UIState.Error).message)

@@ -23,7 +23,11 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun MovieScreen(
@@ -44,87 +48,95 @@ fun MovieScreen(
         viewModel.isWatched(movieId.toInt())
     }
 
-
-    when (movieState) {
-        is UIState.Loading -> {
-            Loading()
-        }
-        is UIState.Success -> {
-            val movie = (movieState as UIState.Success<MovieDetailsUI>).data
-            Scaffold(
-                topBar = {
-                    MovieTopBar(
-                        onBackPress = onBackPress,
-                        title = movie.title
-                    )
-                },
-                bottomBar = {
-                    MovieBottomBar(
-                        movieId = movieId.toInt(),
-                        isWatched = {
-                            isFavorite
-                        },
-                        movieList = movieList,
-                        onWatchedClick = {
-                            if (isFavorite) {
-                                viewModel.removeWatched(movieId.toInt())
-                                coroutineScope.launch {
-                                    snackBarHostState.showSnackbar(
-                                        message = "Nunca viste esta pelicula" ,
-                                        duration = SnackbarDuration.Short
-                                    )
-                                }
-                            } else {
-                                viewModel.addWatched(movieId.toInt())
-                                coroutineScope.launch {
-                                    snackBarHostState.showSnackbar(
-                                        message = "Agregada como Vista! ",
-                                        duration = SnackbarDuration.Short
-                                    )
-                                }
-                            }
-                        },
-                        onAddToListClick = {
-                                movieId, listId ->
+    Scaffold(
+        topBar = {
+            if (movieState is UIState.Success) {
+                val movie = (movieState as UIState.Success<MovieDetailsUI>).data
+                MovieTopBar(
+                    onBackPress = onBackPress,
+                    title = movie.title
+                )
+            } else {
+                MovieTopBar(
+                    onBackPress = onBackPress,
+                    title = "Cargando..."
+                )
+            }
+        },
+        bottomBar = {
+            if (movieState is UIState.Success) {
+                MovieBottomBar(
+                    movieId = movieId.toInt(),
+                    isWatched = { isFavorite },
+                    movieList = movieList,
+                    onWatchedClick = {
+                        if (isFavorite) {
+                            viewModel.removeWatched(movieId.toInt())
                             coroutineScope.launch {
                                 snackBarHostState.showSnackbar(
-                                    message = "Pelicula Guardada! :)",
+                                    message = "Nunca viste esta pelicula",
                                     duration = SnackbarDuration.Short
                                 )
                             }
-                            viewModel.addMovieToList(listId.toString(), movieId)
-
-                        },
-                        onCreateNewListClick = {
-                                title, description, movieId ->
+                        } else {
+                            viewModel.addWatched(movieId.toInt())
                             coroutineScope.launch {
                                 snackBarHostState.showSnackbar(
-                                    message = "Pelicula Guardada en nueva lista! :)",
+                                    message = "Agregada como Vista!",
                                     duration = SnackbarDuration.Short
                                 )
                             }
-                            viewModel.createMovieList(title, description, "es", movieId.toInt())
-                            showCreateListDialog.value = false
-                        },
-                        onShareClick = {
-                            context.shareMovie(movie)
                         }
-                    )
-                },
-                content = { paddingValues ->
+                    },
+                    onAddToListClick = { movieId, listId ->
+                        coroutineScope.launch {
+                            snackBarHostState.showSnackbar(
+                                message = "Pelicula Guardada! :)",
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                        viewModel.addMovieToList(listId.toString(), movieId)
+                    },
+                    onCreateNewListClick = { title, description, movieId ->
+                        coroutineScope.launch {
+                            snackBarHostState.showSnackbar(
+                                message = "Pelicula Guardada en nueva lista! :)",
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                        viewModel.createMovieList(title, description, "es", movieId.toInt())
+                        showCreateListDialog.value = false
+                    },
+                    onShareClick = { context.shareMovie((movieState as UIState.Success<MovieDetailsUI>).data) }
+                )
+            }
+        },
+        content = { paddingValues ->
+            when (movieState) {
+                is UIState.Loading -> {
+                    Loading()
+                }
+                is UIState.Success -> {
+                    val movie = (movieState as UIState.Success<MovieDetailsUI>).data
                     MovieDetailsContent(movie, paddingValues)
-                },
-                snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
-            )
-        }
-        is UIState.Error -> {
-            Text(
-                text = (movieState as UIState.Error).message,
-                color = Color.Red
-            )
-        }
-        UIState.Idle -> TODO()
-    }
+                }
+                is UIState.Error -> {
+                    Text(
+                        text = (movieState as UIState.Error).message,
+                        color = Color.Red,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                        textAlign = TextAlign.Center
+                    )
+                }
+                UIState.Idle -> {
+                    // Puedes manejar este estado si necesitas algo en particular aquí
+                }
+            }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
+    )
 }
 
 

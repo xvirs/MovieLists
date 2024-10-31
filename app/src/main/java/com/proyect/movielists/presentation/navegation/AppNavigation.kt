@@ -40,7 +40,10 @@ fun AppNavigation(){
         }
         composable("list/{listId}") { backStackEntry ->
             val listId = backStackEntry.arguments?.getString("listId")
-            ListScreen(listId = listId!!) {
+            ListScreen(
+                navControllerAppNavigation,
+                listId = listId!!
+            ) {
                 navControllerAppNavigation.popBackStack()
             }
         }

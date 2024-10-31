@@ -55,7 +55,8 @@ fun MainScreen(
             DrawerProfile(
                 navControllerAppNavigation = navControllerAppNavigation,
                 snackBarHostState = snackBarHostState,
-                coroutineScope = coroutineScope
+                coroutineScope = coroutineScope,
+                setGesturesEnabled = { gesturesEnabled.value = it }
             )
         },
         content = {

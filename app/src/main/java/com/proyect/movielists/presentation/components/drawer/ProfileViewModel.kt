@@ -23,6 +23,9 @@ class ProfileViewModel(
     private val _uiState = MutableStateFlow<UIState<ProfileUI>>(UIState.Idle)
     val uiState: StateFlow<UIState<ProfileUI>> = _uiState.asStateFlow()
 
+    private val _isLoggingOut = MutableStateFlow(false)
+    val isLoggingOut: StateFlow<Boolean> = _isLoggingOut.asStateFlow()
+
     init {
         getProfile()
     }
@@ -41,17 +44,18 @@ class ProfileViewModel(
         }
     }
 
-    suspend fun deleteSession() : String {
-        _uiState.value = UIState.Loading
+    suspend fun deleteSession(): String {
+        _isLoggingOut.value = true
         val result = withContext(Dispatchers.IO) {
             deleteSessionUseCase.invoke()
         }
+        _isLoggingOut.value = false
         return when (result) {
             is StatusResult.Success -> {
-                ":)  Hasta Luego!"
+                _uiState.value = UIState.Loading
+                ":) Hasta Luego!"
             }
-            is StatusResult.Error -> ":(  Hubo un error al cerrar la sesion"
+            is StatusResult.Error -> ":( Hubo un error al cerrar la sesión"
         }
-
     }
 }

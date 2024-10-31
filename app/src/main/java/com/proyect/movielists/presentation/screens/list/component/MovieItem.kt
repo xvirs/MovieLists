@@ -35,7 +35,8 @@ import com.proyect.movielists.presentation.models.MovieUI
 @Composable
 fun MovieItem(
     movie: MovieUI,
-    onRemoveMovie: () -> Unit
+    onRemoveMovie: () -> Unit,
+    navigateToMovie: (Int) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -50,7 +51,7 @@ fun MovieItem(
 //                        onLongPress(movie.id ?: 0)
                     },
                     onTap = {
-//                        onTap(movie.id ?: 0)
+                       navigateToMovie(movie.id)
                     }
                 )
             }

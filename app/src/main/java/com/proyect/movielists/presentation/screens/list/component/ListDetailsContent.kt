@@ -21,25 +21,35 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.proyect.movielists.presentation.models.MovieListUI
+import com.proyect.movielists.presentation.models.MovieUI
 
 @Composable
 fun ListDetailsContent(
     listDetails: MovieListUI,
+    watchedMovies: List<MovieUI>,
+    unwatchedMovies: List<MovieUI>,
     onRemoveMovie: (String) -> Unit,
+    navigateToMovie: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding( horizontal = 16.dp)
-            .padding( top = 16.dp)
+            .padding(horizontal = 16.dp)
+            .padding(top = 16.dp)
     ) {
         Column {
             Card(
@@ -99,11 +109,66 @@ fun ListDetailsContent(
                 }
 
             } else {
-                LazyColumn(modifier = Modifier.weight(1f)) {
-                    items(listDetails.movies) { movie ->
+                MovieTabComponent(
+                    watchedMovies = watchedMovies,
+                    unwatchedMovies = unwatchedMovies,
+                    onRemoveMovie = {onRemoveMovie(it)},
+                    navigateToMovie = { navigateToMovie(it) }
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun MovieTabComponent(
+    watchedMovies: List<MovieUI>,
+    unwatchedMovies: List<MovieUI>,
+    onRemoveMovie: (String) -> Unit,
+    navigateToMovie: (Int) -> Unit
+) {
+    var selectedTabIndex by remember { mutableStateOf(0) }
+    val tabTitles = listOf("No Vistas", "Vistas")
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        TabRow(
+            selectedTabIndex = selectedTabIndex,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            tabTitles.forEachIndexed { index, title ->
+                Tab(
+                    selected = selectedTabIndex == index,
+                    onClick = { selectedTabIndex = index },
+                    text = { Text(title) }
+                )
+            }
+        }
+        when (selectedTabIndex) {
+            0 -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    items(unwatchedMovies) { movie ->
                         MovieItem(
                             movie = movie,
-                            onRemoveMovie = { onRemoveMovie(movie.id.toString()) }
+                            onRemoveMovie = { onRemoveMovie(movie.id.toString()) },
+                            navigateToMovie = { navigateToMovie(it) }
+                        )
+                    }
+                }
+            }
+            1 -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    items(watchedMovies) { movie ->
+                        MovieItem(
+                            movie = movie,
+                            onRemoveMovie = { onRemoveMovie(movie.id.toString()) },
+                            navigateToMovie = { navigateToMovie(it) }
                         )
                     }
                 }

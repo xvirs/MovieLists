@@ -21,12 +21,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.proyect.movielists.presentation.models.ProfileUI
+import com.proyect.movielists.utils.UIState
 
 
 @Composable
 fun ProfileContent(
     profile: ProfileUI,
-    closeSession: () -> Unit
+    closeSession: () -> Unit,
+    isLoggingOut: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -76,7 +78,10 @@ fun ProfileContent(
         HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f))
 
         Spacer(modifier = Modifier.weight(1f))
-        LogoutButton(closeSession)
+        LogoutButton(
+            navigateToLogin = closeSession,
+            isLoggingOut = isLoggingOut
+        )
         Spacer(modifier = Modifier.height(70.dp))
     }
 }
