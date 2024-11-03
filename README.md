@@ -69,7 +69,7 @@
   <li><strong>Ktor:</strong> Cliente HTTP para solicitudes de API.</li>
   <li><strong>Coil:</strong> Librería de carga de imágenes para Compose.</li>
 </ul>
-<p>Para más detalles sobre las versiones y librerías específicas, consulta el archivo <a href="[./build.gradle](https://github.com/xvirs/MovieLists/blob/master/app/build.gradle.kts)">build.gradle</a>.</p>
+<p>Para más detalles sobre las versiones y librerías específicas, consulta el archivo <a href="https://github.com/xvirs/MovieLists/blob/master/app/build.gradle.kts">build.gradle</a>.</p>
 
 <h2>🏗️ Arquitectura</h2>
 <p>Esta aplicación sigue los principios de <strong>Clean Architecture</strong> y utiliza una arquitectura en capas que separa claramente las responsabilidades:</p>
