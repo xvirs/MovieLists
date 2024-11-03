@@ -6,9 +6,9 @@
 
 <!-- Agrega aquí las URLs de las imágenes -->
 <p align="center">
-  <img src="URL_DE_LA_IMAGEN_1" alt="Pantalla Principal" width="200"/>
-  <img src="URL_DE_LA_IMAGEN_2" alt="Detalle de Película" width="200"/>
-  <img src="URL_DE_LA_IMAGEN_3" alt="Lista de Películas" width="200"/>
+  ![Pantalla Principal](./screenshots/Screenshot_20241103_031827_Movie Lists.jpg)
+  ![Pantalla Principal](./screenshots/Screenshot_20241103_031839_Movie Lists.jpg)
+  ![Pantalla Principal](./screenshots/Screenshot_20241103_031904_Movie Lists.jpg)
 </p>
 
 <h2>🧩 Funcionalidades</h2>
