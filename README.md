@@ -6,9 +6,9 @@
 
 <!-- Agrega aquí las URLs de las imágenes -->
 <p align="center">
-  <img src="./screenshots/Screenshot_20241103_031827_Movie Lists.jpg" alt="Pantalla Principal" width="250" />
-  <img src="./screenshots/Screenshot_20241103_031839_Movie Lists.jpg" alt="Pantalla Principal" width="250" />
-  <img src="./screenshots/Screenshot_20241103_031904_Movie Lists.jpg" alt="Pantalla Principal" width="250" />
+  <img src="./Screenshots/Screenshot_20241103_031827_Movie Lists.jpg" alt="Pantalla Principal" width="250" />
+  <img src="./Screenshots/Screenshot_20241103_031839_Movie Lists.jpg" alt="Pantalla Principal" width="250" />
+  <img src="./Screenshots/Screenshot_20241103_031904_Movie Lists.jpg" alt="Pantalla Principal" width="250" />
 </p>
 
 
