@@ -1,10 +1,6 @@
 package com.proyect.movielists
 
 import android.app.Application
-import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import com.google.firebase.FirebaseApp
 import com.proyect.movielists.di.useCaseModule
 import com.proyect.movielists.di.viewModelModule

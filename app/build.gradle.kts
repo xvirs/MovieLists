@@ -1,10 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("org.jetbrains.kotlin.kapt")
     alias(libs.plugins.kotlinxSerialization)
-    id("com.google.gms.google-services") version "4.4.2" apply false
+    id("com.google.gms.google-services") version "4.4.2"
     id("com.google.devtools.ksp")
-    id("com.google.firebase.crashlytics") version "3.0.2" apply false
+    id("com.google.firebase.crashlytics") version "3.0.2"
 }
 
 android {
@@ -51,6 +52,11 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    applicationVariants.all {
+        addJavaSourceFoldersToModel(
+            File(layout.buildDirectory.get().asFile, "generated/ksp/$name/kotlin")
+        )
     }
 }
 

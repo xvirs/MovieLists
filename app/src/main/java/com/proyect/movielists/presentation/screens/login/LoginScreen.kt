@@ -62,8 +62,8 @@ fun LoginScreen(
     coroutineScope: CoroutineScope
 ) {
     val viewModel: AuthViewModel = koinViewModel()
-    var email by remember { mutableStateOf("XavierRosales") }
-    var password by remember { mutableStateOf("reyvax15408571") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     val uiState by viewModel.uiState.collectAsState()
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
@@ -163,7 +163,6 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.weight(0.5f))
 
-                // Formulario de login
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -176,14 +175,20 @@ fun LoginScreen(
                             email = it
                             emailError = false
                         },
-                        label = { Text("Email") },
+                        label = {
+                            if (emailError) {
+                                Text("El campo email es obligatorio")
+                            } else {
+                                Text("Usuario")
+                            }
+                        },
                         isError = emailError,
                         modifier = Modifier.fillMaxWidth(),
                         enabled = !isLoading
                     )
                     if (emailError) {
                         Text(
-                            text = "El campo email es obligatorio",
+                            text = "",
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodySmall
                         )
@@ -196,7 +201,13 @@ fun LoginScreen(
                             password = it
                             passwordError = false
                         },
-                        label = { Text("Contraseña") },
+                        label = {
+                            if (emailError) {
+                                Text("El campo contraseña es obligatorio")
+                            } else {
+                                Text("contraseña")
+                            }
+                        },
                         isError = passwordError,
                         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         modifier = Modifier.fillMaxWidth(),
@@ -212,7 +223,7 @@ fun LoginScreen(
                     )
                     if (passwordError) {
                         Text(
-                            text = "El campo contraseña es obligatorio",
+                            text = "",
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodySmall
                         )
@@ -223,6 +234,7 @@ fun LoginScreen(
                             emailError = email.isBlank()
                             passwordError = password.isBlank()
                             if (!emailError && !passwordError) {
+//                                throw RuntimeException("Test Crash") // Force a crash
                                 viewModel.login(email, password)
                             }
                         },
