@@ -62,6 +62,18 @@
   <li><strong>Jetpack Compose:</strong> Framework de UI declarativa para construir interfaces modernas.</li>
 </ul>
 
+<h2>🚀 Tecnologías Utilizadas</h2>
+<ul>
+  <li><strong>Ktor:</strong> Cliente HTTP para interactuar con la API de TMDB.</li>
+  <li><strong>Coroutines y Flows:</strong> Para manejar la concurrencia y los flujos de datos de manera eficiente.</li>
+  <li><strong>Koin:</strong> Framework para la inyección de dependencias.</li>
+  <li><strong>Jetpack Compose:</strong> Framework de UI declarativa para Android.</li>
+  <li><strong>Material 3:</strong> Diseño de UI utilizando los componentes y directrices de Material Design 3.</li>
+  <li><strong>DataStore:</strong> Almacenamiento de preferencias del usuario en lugar de SharedPreferences.</li>
+  <li><strong>Coil:</strong> Librería de carga de imágenes optimizada para Compose.</li>
+  <li><strong>Firebase:</strong> Se utiliza para <strong>Analytics</strong> y <strong>Crashlytics</strong> para análisis de uso y reporte de errores en la app.</li>
+</ul>
+
 <h3>Dependencias</h3>
 <ul>
   <li><strong>Jetpack Libraries:</strong> Core KTX, Lifecycle, Navigation, Room, DataStore, y Material.</li>
@@ -71,13 +83,69 @@
 </ul>
 <p>Para más detalles sobre las versiones y librerías específicas, consulta el archivo <a href="https://github.com/xvirs/MovieLists/blob/master/app/build.gradle.kts">build.gradle</a>.</p>
 
-<h2>🏗️ Arquitectura</h2>
-<p>Esta aplicación sigue los principios de <strong>Clean Architecture</strong> y utiliza una arquitectura en capas que separa claramente las responsabilidades:</p>
+<h1>📐 Arquitectura de MovieLists App</h1>
+<p>
+  La arquitectura de MovieLists App está diseñada siguiendo los principios de <strong>Clean Architecture</strong>, 
+  con una estructura de tres capas principales: <strong>Data</strong>, <strong>Domain</strong> y <strong>Presentation</strong>. 
+  Esta estructura modular permite mantener una separación clara de responsabilidades y facilita el mantenimiento, escalabilidad y pruebas del código. 
+  A continuación, se describe la estructura de carpetas detallada y el propósito de cada una.
+</p>
+
+<h2>🔍 Estructura de Carpetas</h2>
+<p>La arquitectura se organiza en las siguientes carpetas principales:</p>
+
+<h3>/Arquitectura</h3>
+
 <ul>
-  <li><strong>Capa de Datos (Data):</strong> Maneja las fuentes de datos, como la base de datos local (Room) y el cliente de API (Ktor). También contiene los modelos y mappers para la transformación de datos.</li>
-  <li><strong>Capa de Dominio (Domain):</strong> Contiene los casos de uso que representan las reglas de negocio de la aplicación, proporcionando una interfaz para la capa de presentación.</li>
-  <li><strong>Capa de Presentación (Presentation):</strong> Gestiona la lógica de UI utilizando <code>ViewModels</code>, <code>UIState</code>, y componibles de Jetpack Compose.</li>
+  <li><strong>/data:</strong> Capa de datos responsable de gestionar las fuentes de datos de la aplicación, ya sea a través de APIs externas o de almacenamiento local.</li>
+  <ul>
+    <li><strong>/datasource:</strong> Incluye las fuentes de datos, como los servicios de red o las consultas a la base de datos local.</li>
+    <li><strong>/interfaces:</strong> Define las interfaces de los repositorios, permitiendo que la capa de dominio interactúe con la capa de datos a través de abstracciones.</li>
+    <li><strong>/models:</strong> Contiene los modelos de datos utilizados exclusivamente dentro de esta capa, junto con un mapeador (<strong>mapper</strong>) para transformar estos modelos a otros modelos de la app.</li>
+    <li><strong>/network:</strong> Contiene la lógica de red, gestionada a través de <strong>Ktor</strong>, incluyendo las configuraciones y llamadas HTTP.</li>
+    <li><strong>/repository:</strong> Implementación de los repositorios que se comunican con las fuentes de datos (remotas y locales) y proporcionan datos procesados a la capa de dominio.</li>
+  </ul>
+
+  <li><strong>/domain:</strong> Capa de dominio donde se encuentran las reglas de negocio y lógica principal de la aplicación, independiente de frameworks o detalles de implementación.</li>
+  <ul>
+    <li><strong>/interfaces:</strong> Define las interfaces necesarias para la comunicación entre la capa de dominio y la capa de datos.</li>
+    <li><strong>/models:</strong> Contiene modelos específicos para esta capa, representando la lógica de negocio.</li>
+    <li><strong>/usecase:</strong> Contiene los casos de uso que encapsulan las acciones o funcionalidades principales de la aplicación, usando <strong>Flows</strong> y <strong>Coroutines</strong> para el manejo de flujos de datos.</li>
+  </ul>
+
+  <li><strong>/presentation:</strong> Capa de presentación responsable de la interfaz de usuario, utilizando <strong>Jetpack Compose</strong> y otras herramientas de diseño modernas.</li>
+  <ul>
+    <li><strong>/components:</strong> Contiene los elementos reutilizables de la UI, divididos en subcarpetas como <code>drawer</code>, <code>scaffold</code>, <code>searchBar</code>, entre otros.</li>
+    <ul>
+      <li><strong>/component:</strong> Subcarpeta dentro de algunos componentes clave que contiene los elementos reutilizables de cada uno, como en <code>searchBar/component</code>.</li>
+      <li><strong>/shared:</strong> Almacena los componentes de UI que son compartidos en varias partes de la app.</li>
+    </ul>
+    <li><strong>/models:</strong> Incluye modelos de UI específicos para esta capa, junto con mappers para transformar modelos de dominio a modelos de presentación.</li>
+    <li><strong>/mappers:</strong> Mapea modelos entre las capas de dominio y presentación, permitiendo la independencia entre ellas.</li>
+    <li><strong>/navigation:</strong> Gestiona la navegación de la aplicación, estructurada con <strong>Navigation Compose</strong>.</li>
+    <li><strong>/screens:</strong> Contiene las pantallas principales de la app (como <code>explorer</code>, <code>list</code>, <code>lists</code>, <code>login</code>, <code>movie</code>, <code>watched</code>), cada una estructurada para facilitar la modularidad.</li>
+    <ul>
+      <li><strong>/component:</strong> Subcarpeta dentro de algunas pantallas que organiza los componentes específicos de cada pantalla, como en <code>lists/component</code>.</li>
+    </ul>
+    <li><strong>/ui.theme:</strong> Configura los temas de la app, incluyendo el soporte para <strong>Material 3</strong> y modos claro/oscuro.</li>
+  </ul>
+
+  <li><strong>/utils:</strong> Incluye clases y funciones auxiliares que se utilizan en varias capas de la aplicación.</li>
 </ul>
+
+<h3>Otras Carpetas</h3>
+<ul>
+  <li><strong>/di:</strong> Configuración de <strong>Koin</strong> para la inyección de dependencias, permitiendo la instancia única de servicios y ViewModels.</li>
+</ul>
+
+<h2>📄 Descripción General de la Arquitectura</h2>
+<p>La arquitectura de MovieLists App sigue los principios de Clean Architecture, donde cada capa tiene su responsabilidad claramente definida:</p>
+<ul>
+  <li><strong>Capa de Datos (Data):</strong> Gestiona las fuentes de datos y maneja la lógica de transformación de datos con mappers. Utiliza Ktor para llamadas de red, DataStore para el almacenamiento de preferencias, y Coil para carga de imágenes.</li>
+  <li><strong>Capa de Dominio (Domain):</strong> Implementa la lógica de negocio de la aplicación. Los casos de uso permiten que la capa de presentación interactúe con los datos de manera estructurada, empleando Flows y Coroutines para la manipulación de datos asíncrona.</li>
+  <li><strong>Capa de Presentación (Presentation):</strong> Controla la lógica de UI y los eventos del usuario. Organiza la UI en componentes y pantallas modulares, con Jetpack Compose y Material 3 para una experiencia moderna y responsive.</li>
+</ul>
+<p>Con esta estructura, MovieLists App garantiza que cada capa sea fácilmente testeable y reutilizable, optimizando la app para su mantenimiento y escalabilidad.</p>
 
 <h3>Patrón de Manejo de Estados</h3>
 <p>Utiliza una clase <code>sealed class UIState</code> para representar diferentes estados de la interfaz (cargando, éxito, error), lo que simplifica la gestión de estados en los <code>ViewModels</code>.</p>
