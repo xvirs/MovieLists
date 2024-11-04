@@ -20,9 +20,12 @@
   A continuación se muestran capturas de la app en funcionamiento, destacando la pantalla de exploración de películas, la vista de gestión de listas y el perfil de usuario, diseñadas con <strong>Jetpack Compose</strong> para una experiencia visual fluida y moderna.
 </p>
 <p align="center">
-  <img src="./Screenshots/Screenshot_Exploracion.jpg" alt="Exploración de Películas" width="250" />
-  <img src="./Screenshots/Screenshot_GestionListas.jpg" alt="Gestión de Listas" width="250" />
-  <img src="./Screenshots/Screenshot_PerfilUsuario.jpg" alt="Perfil de Usuario" width="250" />
+  <img src="./Screenshots/Screenshot_20241103_031932_Movie%20Lists.jpg" alt="Exploración de Películas" width="250" />
+  <img src="./Screenshots/Screenshot_20241103_032005_Movie%20Lists.jpg" alt="Gestión de Listas" width="250" />
+  <img src="./Screenshots/Screenshot_20241103_032036_Movie%20Lists.jpg" alt="Perfil de Usuario" width="250" />
+  <img src="./Screenshots/Screenshot_20241103_032121_Movie%20Lists.jpg" alt="Perfil de Usuario" width="250" />
+  <img src="./Screenshots/Screenshot_20241103_032235_Movie%20Lists.jpg" alt="Perfil de Usuario" width="250" />
+  
 </p>
 
 <h2>🧩 Funcionalidades</h2>
