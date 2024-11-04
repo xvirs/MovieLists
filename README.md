@@ -7,7 +7,7 @@
 
 <h3>Inicio de Sesión</h3>
 <p>
-  La pantalla de inicio de sesión es totalmente responsiva, adaptándose al modo claro, oscuro y al color de sistema elegido por el usuario en su dispositivo.
+  La aplicacion totalmente responsiva, adaptándose al modo claro, oscuro y al color de sistema elegido por el usuario en su dispositivo.
 </p>
 <p align="center">
   <img src="./Screenshots/Screenshot_20241103_031827_Movie Lists.jpg" alt="Login Modo Claro" width="250" />
@@ -17,7 +17,7 @@
 
 <h3>Interfaz de Usuario en la App</h3>
 <p>
-  A continuación se muestran capturas de la app en funcionamiento, destacando la pantalla de exploración de películas, la vista de gestión de listas y el perfil de usuario, diseñadas con <strong>Jetpack Compose</strong> para una experiencia visual fluida y moderna.
+  A continuación se muestran capturas de la app en funcionamiento, destacando la pantalla de exploración de películas, la vista de gestión de listas y otras, diseñadas con <strong>Jetpack Compose</strong> para una experiencia visual fluida y moderna.
 </p>
 <p align="center">
   <img src="./Screenshots/Screenshot_20241103_031932_Movie%20Lists.jpg" alt="Exploración de Películas" width="250" />
@@ -34,7 +34,8 @@
   <li><strong>Gestión de listas:</strong> Crea, edita y elimina listas para organizar tus películas, sincronizadas con TMDB.</li>
   <li><strong>Control de películas vistas:</strong> Marca películas como vistas y organiza tus listas.</li>
   <li><strong>Autenticación TMDB:</strong> Inicia sesión mediante TMDB para personalizar tu experiencia y guardar tus listas.</li>
-  <li><strong>Modo claro y oscuro:</strong> Disfruta de una interfaz adaptable a diferentes condiciones de luz.</li>
+  <
+li><strong>Modo claro y oscuro:</strong> Disfruta de una interfaz adaptable a diferentes condiciones de luz.</li>
 </ul>
 
 
