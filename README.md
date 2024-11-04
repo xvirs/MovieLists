@@ -82,13 +82,6 @@
 </ul>
 
 <h2>🛠️ Tecnologías Utilizadas</h2>
-<h3>Lenguaje y Frameworks</h3>
-<ul>
-  <li><strong>Kotlin:</strong> Lenguaje principal de desarrollo.</li>
-  <li><strong>Jetpack Compose:</strong> Framework de UI declarativa para construir interfaces modernas.</li>
-</ul>
-
-<h2>🚀 Tecnologías Utilizadas</h2>
 <ul>
   <li><strong>Ktor:</strong> Cliente HTTP para interactuar con la API de TMDB.</li>
   <li><strong>Coroutines y Flows:</strong> Para manejar la concurrencia y los flujos de datos de manera eficiente.</li>
