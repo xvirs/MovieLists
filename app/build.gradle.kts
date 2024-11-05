@@ -115,12 +115,12 @@ dependencies {
     implementation("androidx.compose.material:material:1.6.8")
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    //Room
-    val roomVersion = "2.6.1"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+//    //Room
+//    val roomVersion = "2.6.1"
+//    implementation("androidx.room:room-runtime:$roomVersion")
+//    implementation("androidx.room:room-ktx:$roomVersion")
+//    ksp("androidx.room:room-compiler:$roomVersion")
+//    annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
     //Icon Material
     implementation("androidx.compose.material:material-icons-extended:1.5.0")

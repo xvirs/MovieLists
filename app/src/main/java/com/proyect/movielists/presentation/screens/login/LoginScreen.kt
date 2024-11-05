@@ -234,7 +234,6 @@ fun LoginScreen(
                             emailError = email.isBlank()
                             passwordError = password.isBlank()
                             if (!emailError && !passwordError) {
-//                                throw RuntimeException("Test Crash") // Force a crash
                                 viewModel.login(email, password)
                             }
                         },
