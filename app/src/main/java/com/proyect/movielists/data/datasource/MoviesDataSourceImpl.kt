@@ -28,6 +28,7 @@ class MoviesDataSourceImpl(private val baseClient: BaseClient) : MoviesDataSourc
         val errorMessage = "Error al buscar la pelicula"
         val response = baseClient.get(
             url = endpoint,
+            language = "es-ES",
             errorMessage = errorMessage,
             valueParams = mapOf("query" to query)
         )

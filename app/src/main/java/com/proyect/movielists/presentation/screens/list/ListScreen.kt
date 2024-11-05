@@ -42,8 +42,9 @@ fun ListScreen(
     Scaffold(
         topBar = {
             if (listDetailsState is UIState.Success) {
+                val title = (listDetailsState as UIState.Success<MovieListUI>).data.name
                 ListTopBar(
-                    title = (listDetailsState as UIState.Success<MovieListUI>).data.name,
+                    title = title,
                     onBackClick = onBackClick,
                     onRemoveList = { viewModel.removeList(listId.toInt()) }
                 )

@@ -44,6 +44,7 @@ class MovieListDataSourceImpl(private val baseClient: BaseClient) : MovieListDat
         val errorMessage = "Error al crear la lista"
         val response = baseClient.get(
             url = endpoint,
+            language = "es-ES",
             errorMessage = errorMessage
         )
         return if (response.httpResponse != null) {
@@ -61,6 +62,7 @@ class MovieListDataSourceImpl(private val baseClient: BaseClient) : MovieListDat
         val errorMessage = "Error al crear la lista"
         val response = baseClient.get(
             url = endpoint,
+            language = "es-ES",
             errorMessage = errorMessage,
             valueParams = mapOf("session_id" to sessionId)
         )

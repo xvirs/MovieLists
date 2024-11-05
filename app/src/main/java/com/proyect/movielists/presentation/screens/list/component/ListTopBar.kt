@@ -26,7 +26,7 @@ fun ListTopBar(
 
     val expandMenu = remember { mutableStateOf(false) }
     TopAppBar(
-        title = { Text(text = "title") },
+        title = { Text(text = title) },
         navigationIcon = {
             IconButton(onClick = { onBackClick() }) {
                 Icon(

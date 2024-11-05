@@ -16,6 +16,7 @@ class FavoriteDataSourceImpl(private val baseClient : BaseClient) : FavoriteData
         val errorMessage = "Error al obtener favoritos"
         val response = baseClient.get(
             url = endpoint,
+            language = "es-ES",
             errorMessage = errorMessage
         )
         return if (response.httpResponse != null){
