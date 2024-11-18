@@ -37,6 +37,7 @@ import com.proyect.movielists.domine.interfaces.MoviesRepository
 import com.proyect.movielists.domine.interfaces.ProfileRepository
 import com.proyect.movielists.domine.usecase.AddFavoriteUseCase
 import com.proyect.movielists.domine.usecase.AddMovieToListUseCase
+import com.proyect.movielists.domine.usecase.CheckSessionUseCase
 import com.proyect.movielists.domine.usecase.CreateMovieListUseCase
 import com.proyect.movielists.domine.usecase.DeleteSessionUseCase
 import com.proyect.movielists.domine.usecase.GetFavoriteUseCase
@@ -65,6 +66,7 @@ val useCaseModule = module {
 
     single<AuthDataSource> { AuthDataSourceImpl(get()) }
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
+    factory { CheckSessionUseCase(get()) }
     factory { LoginUseCase(get()) }
     factory { DeleteSessionUseCase(get()) }
 

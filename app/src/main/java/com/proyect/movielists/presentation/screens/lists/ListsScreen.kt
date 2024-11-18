@@ -30,11 +30,11 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ListsScreen(
+    viewModel: ListsViewModel,
     navControllerAppNavigation: NavHostController,
     snackBarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
 ) {
-    val viewModel: ListsViewModel = koinViewModel()
     var showDialog by remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsState()
     val movieLists = viewModel.moviesLists.collectAsState()

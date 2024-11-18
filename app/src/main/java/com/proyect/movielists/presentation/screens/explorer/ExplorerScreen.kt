@@ -43,11 +43,11 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ExplorerScreen(
+    viewModel: ExplorerViewModel,
     navControllerAppNavigation: NavHostController,
     snackBarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
 ) {
-    val viewModel: ExplorerViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsState()
     val popularMoviesState by viewModel.popularMovies.collectAsState()
     val upcomingMoviesState by viewModel.upcomingMovies.collectAsState()

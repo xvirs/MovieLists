@@ -18,15 +18,14 @@ import com.proyect.movielists.presentation.components.shared.Loading
 import com.proyect.movielists.presentation.screens.watched.component.WatchedMoviesCarousel
 import com.proyect.movielists.utils.UIState
 import kotlinx.coroutines.CoroutineScope
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun WatchedScreen(
+    viewModel: WatchedViewModel,
     navControllerAppNavigation: NavHostController,
     snackBarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
 ) {
-    val viewModel: WatchedViewModel = koinViewModel()
     val favorites by viewModel.watched.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
     val expandMenu = remember { mutableStateOf(false) }

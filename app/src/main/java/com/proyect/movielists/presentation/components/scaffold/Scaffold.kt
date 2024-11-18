@@ -26,7 +26,11 @@ import com.proyect.movielists.presentation.components.drawer.DrawerProfile
 import com.proyect.movielists.presentation.screens.watched.WatchedScreen
 import com.proyect.movielists.presentation.screens.lists.ListsScreen
 import com.proyect.movielists.presentation.screens.explorer.ExplorerScreen
+import com.proyect.movielists.presentation.screens.explorer.ExplorerViewModel
+import com.proyect.movielists.presentation.screens.lists.ListsViewModel
+import com.proyect.movielists.presentation.screens.watched.WatchedViewModel
 import kotlinx.coroutines.CoroutineScope
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainScreen(
@@ -34,6 +38,10 @@ fun MainScreen(
     snackBarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope
 ) {
+
+    val listsViewModel: ListsViewModel = koinViewModel()
+    val watchedViewModel: WatchedViewModel = koinViewModel()
+    val explorerViewModel: ExplorerViewModel = koinViewModel()
     val navControllerMainScreen = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     var searchActive by remember { mutableStateOf(false) }
@@ -91,22 +99,43 @@ fun MainScreen(
                                 gesturesEnabled.value = false
                             }
                     ) {
-                        composable(Screen.Lists.route) {
+                        composable(
+                            Screen.Lists.route,
+                            enterTransition = { null },
+                            exitTransition = { null },
+                            popEnterTransition = { null },
+                            popExitTransition = { null }
+                        ) {
                             ListsScreen(
+                                viewModel = listsViewModel,
                                 navControllerAppNavigation = navControllerAppNavigation,
                                 snackBarHostState = snackBarHostState,
                                 coroutineScope = coroutineScope
                             )
                         }
-                        composable(Screen.Watched.route) {
+                        composable(
+                            Screen.Watched.route,
+                            enterTransition = { null },
+                            exitTransition = { null },
+                            popEnterTransition = { null },
+                            popExitTransition = { null }
+                        ) {
                             WatchedScreen(
+                                viewModel = watchedViewModel,
                                 navControllerAppNavigation = navControllerAppNavigation,
                                 snackBarHostState = snackBarHostState,
                                 coroutineScope = coroutineScope,
                             )
                         }
-                        composable(Screen.Explorer.route) {
+                        composable(
+                            Screen.Explorer.route,
+                            enterTransition = { null },
+                            exitTransition = { null },
+                            popEnterTransition = { null },
+                            popExitTransition = { null }
+                        ) {
                             ExplorerScreen(
+                                viewModel = explorerViewModel,
                                 navControllerAppNavigation = navControllerAppNavigation,
                                 snackBarHostState = snackBarHostState,
                                 coroutineScope = coroutineScope

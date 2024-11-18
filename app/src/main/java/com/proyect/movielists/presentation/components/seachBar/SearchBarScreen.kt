@@ -1,5 +1,8 @@
 package com.proyect.movielists.presentation.components.seachBar
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
@@ -15,6 +18,7 @@ import com.proyect.movielists.presentation.components.seachBar.component.SearchM
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,19 +43,27 @@ fun SearchBarScreen(
         },
         onSearch = {
             keyboardController?.hide()
-            if (listMovies.value.isEmpty())
-                onSearchActiveChange(false)
+//            if (listMovies.value.isEmpty())
+//                onSearchActiveChange(false)
         },
         active = searchActive,
         onActiveChange = {
             onSearchActiveChange(it)
         },
     ) {
-        SearchMovieList(
-            listMovies = listMovies.value,
-            getMovieID = { movieId ->
-                navControllerAppNavigation.navigate("movie/$movieId")
-            }
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable {
+                    keyboardController?.hide()
+                }
+        ){
+            SearchMovieList(
+                listMovies = listMovies.value,
+                getMovieID = { movieId ->
+                    navControllerAppNavigation.navigate("movie/$movieId")
+                }
+            )
+        }
     }
 }

@@ -13,22 +13,40 @@ import com.proyect.movielists.presentation.screens.list.ListScreen
 import com.proyect.movielists.presentation.screens.movie.MovieScreen
 
 @Composable
-fun AppNavigation(){
+fun AppNavigation(startDestination: String = "login") {
     val navControllerAppNavigation = rememberNavController()
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
     NavHost(
         navController = navControllerAppNavigation,
-        startDestination = "login"
-    ){
-        composable("login") {
+        startDestination = startDestination,
+    ) {
+        composable(
+            "login",
+            enterTransition = { null },
+            exitTransition = { null },
+            popEnterTransition = { null },
+            popExitTransition = { null }
+        ) {
             LoginScreen(navControllerAppNavigation, snackBarHostState, coroutineScope)
         }
-        composable("main") {
+        composable(
+            "main",
+            enterTransition = { null },
+            exitTransition = { null },
+            popEnterTransition = { null },
+            popExitTransition = { null }
+        ) {
             MainScreen(navControllerAppNavigation, snackBarHostState, coroutineScope)
         }
-        composable("movie/{movieId}") { backStackEntry ->
+        composable(
+            "movie/{movieId}",
+            enterTransition = { null },
+            exitTransition = { null },
+            popEnterTransition = { null },
+            popExitTransition = { null }
+        ) { backStackEntry ->
             val movieId = backStackEntry.arguments?.getString("movieId")
             MovieScreen(
                 snackBarHostState = snackBarHostState,
@@ -38,7 +56,14 @@ fun AppNavigation(){
                 navControllerAppNavigation.popBackStack()
             }
         }
-        composable("list/{listId}") { backStackEntry ->
+        composable(
+            "list/{listId}",
+            enterTransition = { null },
+            exitTransition = { null },
+            popEnterTransition = { null },
+            popExitTransition = { null }
+
+        ) { backStackEntry ->
             val listId = backStackEntry.arguments?.getString("listId")
             ListScreen(
                 navControllerAppNavigation,
@@ -47,6 +72,5 @@ fun AppNavigation(){
                 navControllerAppNavigation.popBackStack()
             }
         }
-
     }
 }

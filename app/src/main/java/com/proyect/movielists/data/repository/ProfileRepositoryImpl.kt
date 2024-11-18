@@ -8,7 +8,10 @@ import com.proyect.movielists.domine.models.UserProfile
 import com.proyect.movielists.utils.StatusResult
 import kotlinx.coroutines.flow.first
 
-class ProfileRepositoryImpl( private val profileDataSource : ProfileDataSource, private val sessionDataStore : SessionDataStore) : ProfileRepository {
+class ProfileRepositoryImpl(
+    private val profileDataSource : ProfileDataSource,
+    private val sessionDataStore : SessionDataStore
+) : ProfileRepository {
 
     override suspend fun getProfile(): StatusResult<UserProfile> {
         val requestToken = when (sessionDataStore.sessionIdFlow.first()){

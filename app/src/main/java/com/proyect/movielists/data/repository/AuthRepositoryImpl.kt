@@ -17,6 +17,11 @@ class AuthRepositoryImpl(
     private val sessionDataStore: SessionDataStore
 ) : AuthRepository {
 
+    override suspend fun isUserLoggedIn(): Boolean {
+        val sessionIdResult = sessionDataStore.sessionIdFlow.first()
+        return (sessionIdResult is StatusResult.Success && sessionIdResult.value != null)
+    }
+
     override suspend fun login(
         email: String, password: String
     ): StatusResult<SessionTokenResponse> {
@@ -51,6 +56,8 @@ class AuthRepositoryImpl(
         when (val deleteSessionImpl =
             authDataSource.deleteSession(DeleteSessionTokenRequestDto(getRequestToken()))) {
             is StatusResult.Success -> {
+                sessionDataStore.clearSessionId()
+                sessionDataStore.clearAccountId()
                 return StatusResult.Success(deleteSessionImpl.value)
             }
 

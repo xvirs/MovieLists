@@ -18,7 +18,7 @@ class AuthViewModel(
     val uiState = _uiState.asStateFlow()
 
     fun login(email: String, password: String) {
-        try{
+        try {
             viewModelScope.launch(Dispatchers.IO) {
                 if (email.isBlank() || password.isBlank()) {
                     _uiState.value = UIState.Error("Por favor, complete todos los campos.")
@@ -31,9 +31,8 @@ class AuthViewModel(
                     is StatusResult.Error -> _uiState.value = UIState.Error(result.message)
                 }
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             _uiState.value = UIState.Error(e.message ?: "Error desconocido")
         }
-
     }
 }

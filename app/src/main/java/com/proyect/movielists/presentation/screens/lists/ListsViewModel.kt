@@ -65,7 +65,6 @@ class ListsViewModel(
     }
 
     suspend fun createMovieList(name: String, description: String, language: String) : String {
-        _uiState.value = UIState.Loading
         val result = withContext(Dispatchers.IO) {
             createMovieListUseCase.execute(name, description, language)
         }

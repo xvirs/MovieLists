@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="MovieLists">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-10-27T17:53:10.374909200Z">
+        <DropdownSelection timestamp="2024-11-09T00:58:26.403530200Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="PhysicalDevice" identifier="serial=RF8N937PPFL" />

@@ -47,6 +47,7 @@ class SessionDataStoreImpl(private val dataStore: DataStore<Preferences>) : Sess
         return try {
             dataStore.edit { preferences ->
                 preferences.remove(SESSION_ID)
+                preferences.remove(ACCOUNT_ID)
             }
             StatusResult.Success(Unit)
         } catch (e: Exception) {

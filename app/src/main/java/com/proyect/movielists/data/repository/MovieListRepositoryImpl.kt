@@ -132,17 +132,23 @@ class MovieListRepositoryImpl(
 
     private suspend fun getRequestToken(): String {
         val requestToken = when (sessionDataStore.sessionIdFlow.first()) {
-            is StatusResult.Success -> (sessionDataStore.sessionIdFlow.first() as StatusResult.Success<String?>).value
-            is StatusResult.Error -> { "Error al obtener el Token local de sesión" }
+            is StatusResult.Success -> (sessionDataStore.sessionIdFlow.first() as StatusResult.Success<String>).value
+            is StatusResult.Error -> {
+                sessionDataStore.sessionIdFlow.first() as StatusResult.Error
+                "Error al obtener el Token local de sesión"
+            }
         }
-        return requestToken!!
+        return requestToken
     }
 
     private suspend fun getAccountId(): String {
         val accountId = when (sessionDataStore.accountIdFlow.first()) {
             is StatusResult.Success -> (sessionDataStore.accountIdFlow.first() as StatusResult.Success<String>).value
-            is StatusResult.Error -> { "Error al obtener el ID de la cuenta" }
+            is StatusResult.Error -> {
+                sessionDataStore.accountIdFlow.first() as StatusResult.Error
+                        "Error al obtener el ID de la cuenta"
+            }
         }
-        return accountId!!
+        return accountId
     }
 }
