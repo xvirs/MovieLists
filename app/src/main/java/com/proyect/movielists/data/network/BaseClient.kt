@@ -1,5 +1,6 @@
 package com.proyect.movielists.data.network
 
+import com.proyect.movielists.BuildConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -18,7 +19,7 @@ import kotlinx.serialization.json.Json
 class BaseClient {
     companion object {
         const val BASE_URL = "https://api.themoviedb.org/3"
-        private const val BEARER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMzRlNTQyZGRhOWJmYzBkMjc3ZTRmNzNlZGRmZWFlZSIsIm5iZiI6MTcyNTgwOTIzNi4wNTk0MTksInN1YiI6IjYyNDM2NDllODExNDBmMDA5MDllYjBkZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.DQiu9d57fSf8oaUFjvuzXzY2YfQcKGEYmVfEVj2_xUE"
+        private val BEARER_TOKEN = BuildConfig.TMDB_BEARER_TOKEN
     }
 
     private val apiClient = HttpClient(CIO) {

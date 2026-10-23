@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -23,6 +25,14 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // Token de TMDB: se lee de local.properties (TMDB_BEARER_TOKEN=...), no se versiona.
+        val localProps = Properties().apply {
+            val f = rootProject.file("local.properties")
+            if (f.exists()) f.inputStream().use { load(it) }
+        }
+        val tmdbToken = localProps.getProperty("TMDB_BEARER_TOKEN") ?: System.getenv("TMDB_BEARER_TOKEN") ?: ""
+        buildConfigField("String", "TMDB_BEARER_TOKEN", "\"$tmdbToken\"")
     }
 
     buildTypes {
@@ -44,6 +54,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
